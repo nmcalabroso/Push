@@ -14,11 +14,10 @@ def center_image(image):
 	return image
 
 class Resources:
-	state = {'START':1,'PLAYER':2,'GAME':3,'END':4} #game states
-	player = {'RED':1,'BLUE':2} #player side
+	states = {'TITLE':1,'SETUP':2,'GAME':3,'END':4} #game states
 
-	window_width = 1300
-	window_height = 655
+	window_width = 1080
+	window_height = 600
 	
 	center_x,center_y = get_center_coordinates(window_width,window_height)
 
@@ -28,3 +27,9 @@ class Resources:
 
 	#UI Elements
 	sprites['no_sprite'] 			= image.load(join(res_path,'blank.png'))
+	sprites['play_button']			= center_image(image.load(join(res_path,'play_button.png')))
+	sprites['start_button']			= center_image(image.load(join(res_path,'start_button.png')))
+	#Backgrounds
+	sprites['title_bg']				= center_image(image.load(join(res_path,'title_bg.jpg')))
+	sprites['setup_bg']				= center_image(image.load(join(res_path,'setup_bg.jpg')))
+	sprites['game_bg']				= center_image(image.load(join(res_path,'game_bg.jpg')))

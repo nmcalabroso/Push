@@ -26,17 +26,17 @@ class Button(UIObject):
                 return True
 
     def on_mouse_press(self, x, y, button, modifiers):
-        if self.active and self.world.game_state == Resources.state[self.curr_state]:
+        if self.active and self.world.state == Resources.states[self.curr_state]:
             if button == mouse.LEFT:
                 if self.hit_test(x,y):
                     print "Button: Proceeding to",self.target_game_state,"STATE."
-                    if self.target_game_state == 'PLAYER':
-                        self.world.switch_to_player(self.batch)
+                    if self.target_game_state == 'SETUP':
+                        self.world.switch_to_setup(self.batch)
                     elif self.target_game_state == 'GAME':
                         self.world.switch_to_game(self.batch)
 
     def on_mouse_motion(self, x, y, dx, dy):
-        if self.active and self.world.game_state == Resources.state[self.curr_state]:
+        if self.active and self.world.state == Resources.states[self.curr_state]:
             if self.hit_test(x,y):
                 print "Entering Button:",self.name
                 self.world.window.set_mouse_cursor(self.hand_cursor)
@@ -86,17 +86,16 @@ class TextWidget(UIObject):
         self.world = world
 
         self.document = pyglet.text.document.UnformattedDocument(text)
-        self.document.set_style(0, len(self.document.text), 
-            dict(color=(0, 0, 0, 255))
-        )
+        self.document.set_style(0,
+                            len(self.document.text), 
+                            dict(color=(0, 0, 0, 255)))
         font = self.document.get_font()
         height = font.ascent - font.descent
-        self.layout = pyglet.text.layout.IncrementalTextLayout(
-                                                            self.document,
-                                                            width,
-                                                            height,
-                                                            multiline=False,
-                                                            batch=batch)
+        self.layout = pyglet.text.layout.IncrementalTextLayout(self.document,
+                                                                width,
+                                                                height,
+                                                                multiline=False,
+                                                                batch=batch)
         self.caret = pyglet.text.caret.Caret(self.layout)
 
         self.layout.x = x
@@ -110,7 +109,7 @@ class TextWidget(UIObject):
                                    batch)
 
     def hit_test(self, x, y):
-        if self.active and self.world.game_state == Resources.state[self.curr_state]:
+        if self.active and self.world.state == Resources.states[self.curr_state]:
             return (0 < x - self.layout.x < self.layout.width and
                     0 < y - self.layout.y < self.layout.height)
         return False
@@ -126,7 +125,7 @@ class TextWidget(UIObject):
                 print 'Focusing TextWidget:',self.name
                 self.world.set_focus(self)
 
-        if self.world.focus:
+        if self.world.focus is self:
             self.world.focus.caret.on_mouse_press(x, y, button, modifiers)
 
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
@@ -134,15 +133,15 @@ class TextWidget(UIObject):
             self.world.focus.caret.on_mouse_drag(x, y, dx, dy, buttons, modifiers)
 
     def on_text(self, text):
-        if self.world.focus:
+        if self.world.focus is self:
             self.world.focus.caret.on_text(text)
 
     def on_text_motion(self, motion):
-        if self.world.focus:
+        if self.world.focus is self:
             self.world.focus.caret.on_text_motion(motion)
       
     def on_text_motion_select(self, motion):
-        if self.world.focus:
+        if self.world.focus is self:
             self.world.focus.caret.on_text_motion_select(motion)
 
 
