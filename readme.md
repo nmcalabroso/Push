@@ -1,8 +1,8 @@
-# The Game
+#Push
 
-## Installation
+##Installation
 
-### Dependencies
+###Dependencies
 
 First, install all required dependencies:
 ```bash
@@ -39,7 +39,7 @@ sudo ./install.sh
 
 Clone our repository, and switch to that directory (make sure you've been added to the repo as a collaborator. Otherwise, kindly inform me so that I can add you)
 ```bash
-$ git clone https://github.com/nmcalabroso/CS145.git
-$ cd CS145
+$ git clone https://github.com/nmcalabroso/Push.git
+$ cd Push
 ```
 ༼ つ ◕_◕ ༽つ GIFF ME MP2 <3
