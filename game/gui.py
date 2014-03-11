@@ -32,6 +32,10 @@ class Button(UIObject):
                     print "Button: Proceeding to",self.target_game_state,"STATE."
                     if self.target_game_state == 'SETUP':
                         self.world.switch_to_setup(self.batch)
+                    elif self.target_game_state == 'HOST':
+                        self.world.switch_to_host(self.batch)
+                    elif self.target_game_state == 'JOIN':
+                        self.world.switch_to_join(self.batch)
                     elif self.target_game_state == 'GAME':
                         self.world.switch_to_game(self.batch)
 
@@ -143,7 +147,6 @@ class TextWidget(UIObject):
     def on_text_motion_select(self, motion):
         if self.world.focus is self:
             self.world.focus.caret.on_text_motion_select(motion)
-
 
 class Background(GameObject):
     def __init__(self,name,*args, **kwargs):

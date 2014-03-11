@@ -23,23 +23,46 @@ class GameManager(GameObject):
 		self.delete_widgets_by_batch(batch)
 		self.state += 1
 
+	def switch_to_host(self,batch):
+		self.delete_widgets_by_batch(batch)
+		self.state += 1
+
+	def switch_to_join(self,batch):
+		self.delete_widgets_by_batch(batch)
+		self.state += 2
+
 	def switch_to_game(self,batch):
 		bg = self.find_widget('my_bg')
 		bg.set_image(Resources.sprites['game_bg'])
 		self.set_player_data()
 		self.delete_widgets_by_batch(batch)
 		self.delete_labels_by_batch(batch)
-		self.state += 1
+
+		self.delete_widgets_by_batch(Resources.batches['host'])
+		self.delete_labels_by_batch(Resources.batches['host'])	
+
+		self.delete_widgets_by_batch(Resources.batches['join'])
+		self.delete_labels_by_batch(Resources.batches['join'])
+
+		self.state = Resources.states['GAME']
 
 	def set_player_data(self):
-		text_ip = self.find_widget('text_ip')
-		text_port = self.find_widget('text_port')
-		text_name = self.find_widget('text_name')
+		if self.state == Resources.states['JOIN']:
+			text_ip = self.find_widget('text_ip')
+			text_port = self.find_widget('text_port')
+			text_name = self.find_widget('text_name')
 
-		ip_address = text_ip.document.text
-		port_num = text_port.document.text
-		name = text_name.document.text
+			ip_address = text_ip.document.text
+			port_num = text_port.document.text
+			name = text_name.document.text
+		else:
+			text_port = self.find_widget('text_port1')
+			text_name = self.find_widget('text_name1')
 
+			ip_address = "None"
+			port_num = text_port.document.text
+			name = text_name.document.text
+			
 		print "IP Address:",ip_address
 		print "Port:",port_num
 		print "Name:",name

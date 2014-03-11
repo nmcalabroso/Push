@@ -1,4 +1,8 @@
-import pyglet
+from pyglet.app import run
+from pyglet.clock import ClockDisplay
+from pyglet.clock import set_fps_limit
+from pyglet.clock import schedule_interval
+from pyglet.window import Window
 from game.gui import Background
 from game.gui import Button
 from game.gui import TextWidget
@@ -7,19 +11,21 @@ from game.manager import GameManager
 from game.player import Player
 from game.resources import Resources
 
-game_window = pyglet.window.Window(Resources.window_width, Resources.window_height)
+game_window = Window(Resources.window_width, Resources.window_height)
 game_window.set_caption("Push")
 game_window.set_location(Resources.center_x,Resources.center_y)
-fps = pyglet.clock.ClockDisplay()
+fps = ClockDisplay()
 
 manager = GameManager()
 manager.set_window(game_window)
 
 # Object Batches per state #
-title_batch = pyglet.graphics.Batch()
-setup_batch = pyglet.graphics.Batch()
-game_batch = pyglet.graphics.Batch()
-end_batch = pyglet.graphics.Batch()
+title_batch = Resources.batches['title']
+setup_batch = Resources.batches['setup']
+host_batch = Resources.batches['host']
+join_batch = Resources.batches['join']
+game_batch = Resources.batches['game']
+end_batch = Resources.batches['end']
 # End of Batches
 
 my_bg = Background(name = 'my_bg',
@@ -33,6 +39,10 @@ def on_draw():
 		title_batch.draw()
 	elif manager.state == Resources.states['SETUP']:
 		setup_batch.draw()
+	elif manager.state == Resources.states['HOST']:
+		host_batch.draw()
+	elif manager.state == Resources.states['JOIN']:
+		join_batch.draw()
 	elif manager.state == Resources.states['GAME']:
 		game_batch.draw() #only UI elements
 		#drawing the actual game elements
@@ -47,7 +57,6 @@ def update(dt):
 	manager.update(dt)
 
 #<-- States -->
-
 def title_screen():
 	# Instantiation section #
 	play_button = Button(name = 'start_button',
@@ -68,8 +77,101 @@ def title_screen():
 	manager.add_widget(play_button)
 	# End of importation #
 
-
 def setup_screen():
+	# Instantiation section #
+	host_button = Button(name = 'host_button',
+						curr_state = 'SETUP',
+						target_state = 'HOST',
+						world = manager,
+						img = Resources.sprites['host_button'],
+						x = Resources.window_width*0.5 + 200,
+						y = Resources.window_height*0.6,
+						batch = setup_batch)
+
+	join_button = Button(name = 'join_button',
+						curr_state = 'SETUP',
+						target_state = 'JOIN',
+						world = manager,
+						img = Resources.sprites['join_button'],
+						x = host_button.x,
+						y = host_button.y - 65,
+						batch = setup_batch)
+	# End of Instantiation #
+
+	# Handler specification #
+	game_window.push_handlers(host_button)
+	game_window.push_handlers(join_button)
+	# End of specification #
+
+	# Importation section #
+	manager.add_widget(host_button)
+	manager.add_widget(join_button)
+	# End of importation #
+
+def host_screen():
+	x1 = int((Resources.window_width*0.5))+50
+	y1 = int((Resources.window_height*0.5)+50)
+	
+	input_p2 = UILabel(name = 'label_port1',
+					text = 'Port:',
+					x = x1,
+					y = y1,
+					anchor_y = 'bottom',
+                  	color = (57, 255, 20, 255),
+                  	batch = host_batch)
+
+	text_p2 = TextWidget(text = '',
+						x = input_p2.x+100,
+						y = input_p2.y,
+						width = 250,
+						batch = host_batch,
+						cursor = game_window.get_system_mouse_cursor('text'),
+						curr_state = 'HOST',
+						world = manager,
+						name = 'text_port1')
+
+	input_p3 = UILabel(name = 'label_name1',
+					text = 'Name:',
+					x = input_p2.x,
+					y = input_p2.y-50,
+					anchor_y = 'bottom',
+                  	color = (57, 255, 20, 255),
+                  	batch = host_batch)
+
+	text_p3 = TextWidget(text = '',
+						x = text_p2.x,
+						y = input_p2.y-50,
+						width = 250,
+						batch = host_batch,
+						cursor = game_window.get_system_mouse_cursor('text'),
+						curr_state = 'HOST',
+						world = manager,
+						name = 'text_name1')
+
+	start_button = Button(name = 'start_button1',
+						curr_state = 'HOST',
+						target_state = 'GAME',
+						world = manager,
+						img = Resources.sprites['start_button'],
+					   	x = input_p3.x+120,
+						y = input_p3.y-50,
+					   	batch = host_batch)
+
+	# Handler specification #
+	game_window.push_handlers(start_button)
+	game_window.push_handlers(text_p2)
+	game_window.push_handlers(text_p3)
+	# End of specification #
+
+	# Importation section #
+	manager.add_label(input_p2)
+	manager.add_label(input_p3)
+	manager.add_widget(text_p2)
+	manager.add_widget(text_p3)
+	manager.add_widget(start_button)
+	# End of importation #
+
+def join_screen():
 	x1 = int((Resources.window_width*0.5))+50
 	y1 = int((Resources.window_height*0.5)+50)
 
@@ -79,15 +181,15 @@ def setup_screen():
 					y = y1,
 					anchor_y = 'bottom',
                   	color = (57, 255, 20, 255),
-                  	batch = setup_batch)
+                  	batch = join_batch)
 
 	text_p1 = TextWidget(text = '',
 						x = x1+100,
 						y = y1,
 						width = 250,
-						batch = setup_batch,
+						batch = join_batch,
 						cursor = game_window.get_system_mouse_cursor('text'),
-						curr_state = 'SETUP',
+						curr_state = 'JOIN',
 						world = manager,
 						name = 'text_ip')
 	
@@ -97,15 +199,15 @@ def setup_screen():
 					y = input_p1.y-50,
 					anchor_y = 'bottom',
                   	color = (57, 255, 20, 255),
-                  	batch = setup_batch)
+                  	batch = join_batch)
 
 	text_p2 = TextWidget(text = '',
 						x = text_p1.x,
 						y = input_p1.y-50,
 						width = 250,
-						batch = setup_batch,
+						batch = join_batch,
 						cursor = game_window.get_system_mouse_cursor('text'),
-						curr_state = 'SETUP',
+						curr_state = 'JOIN',
 						world = manager,
 						name = 'text_port')
 
@@ -115,26 +217,26 @@ def setup_screen():
 					y = input_p2.y-50,
 					anchor_y = 'bottom',
                   	color = (57, 255, 20, 255),
-                  	batch = setup_batch)
+                  	batch = join_batch)
 
 	text_p3 = TextWidget(text = '',
 						x = text_p2.x,
 						y = input_p2.y-50,
 						width = 250,
-						batch = setup_batch,
+						batch = join_batch,
 						cursor = game_window.get_system_mouse_cursor('text'),
-						curr_state = 'SETUP',
+						curr_state = 'JOIN',
 						world = manager,
 						name = 'text_name')
 
 	start_button = Button(name = 'start_button',
-						curr_state = 'SETUP',
+						curr_state = 'JOIN',
 						target_state = 'GAME',
 						world = manager,
 						img = Resources.sprites['start_button'],
 					   	x = input_p3.x+120,
 						y = input_p3.y-50,
-					   	batch = setup_batch)
+					   	batch = join_batch)
 
 	# Handler specification #
 	game_window.push_handlers(start_button)
@@ -163,15 +265,17 @@ def end_screen():
 def main():
 	title_screen()
 	setup_screen()
+	join_screen()
+	host_screen()
 	game_screen()
 	end_screen()
 
 	manager.add_widget(my_bg)
 	game_window.push_handlers(manager)
 	#Pyglet Settings
-	pyglet.clock.schedule_interval(update, 1/120.0)
-	pyglet.clock.set_fps_limit(120)
-	pyglet.app.run()
+	schedule_interval(update, 1/120.0)
+	set_fps_limit(120)
+	run()
 
 if __name__ == '__main__':
 	main()
