@@ -27,7 +27,7 @@ class Button(UIObject):
 
     def on_mouse_press(self, x, y, button, modifiers):
         if self.active and self.world.state == Resources.states[self.curr_state]:
-            if button == mouse.LEFT:
+            if button == mouse.LEFT or button == 0:
                 if self.hit_test(x,y):
                     print "Button: Proceeding to",self.target_game_state,"STATE."
                     if self.target_game_state == 'SETUP':
