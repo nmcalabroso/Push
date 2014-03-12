@@ -1,5 +1,7 @@
 from gameobject import GameObject
 from resources import Resources
+from connection import Connection
+from game.player import Player
 
 class GameManager(GameObject):
 
@@ -16,6 +18,7 @@ class GameManager(GameObject):
 		self.state = Resources.states['TITLE']
 		self.focus = None
 		self.set_focus(self.find_widget('text_ip'))
+		#self.my_connection = Connection()
 
 	def switch_to_setup(self,batch):
 		bg = self.find_widget('my_bg')
@@ -35,6 +38,7 @@ class GameManager(GameObject):
 		bg = self.find_widget('my_bg')
 		bg.set_image(Resources.sprites['game_bg'])
 		self.set_player_data()
+
 		self.delete_widgets_by_batch(batch)
 		self.delete_labels_by_batch(batch)
 
@@ -62,10 +66,22 @@ class GameManager(GameObject):
 			ip_address = "None"
 			port_num = text_port.document.text
 			name = text_name.document.text
+			x,y = Resources.starting_points['char_air']
+
+			my_player = Player(name = "host_player",
+							actual_name = name,
+							x = x,
+							y = y,
+							img = Resources.sprites['char_air']
+							)
+
+			self.add_game_object(my_player)
+			self.window.push_handlers(my_player)
 			
 		print "IP Address:",ip_address
 		print "Port:",port_num
 		print "Name:",name
+		print self.game_objects
 
 	def switch_to_end(self):
 		pass
@@ -224,5 +240,6 @@ class GameManager(GameObject):
 		self.window.set_mouse_cursor(None)
 
 	def update(self,dt):
-		#game loop
-		pass
+		if self.state == Resources.states['GAME']:
+			for obj in self.get_game_objects():
+				obj.update(dt)

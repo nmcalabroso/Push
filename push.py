@@ -8,7 +8,6 @@ from game.gui import Button
 from game.gui import TextWidget
 from game.gui import UILabel
 from game.manager import GameManager
-from game.player import Player
 from game.resources import Resources
 
 game_window = Window(Resources.window_width, Resources.window_height)

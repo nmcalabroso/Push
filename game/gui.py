@@ -24,6 +24,7 @@ class Button(UIObject):
         if x > (self.x - (self.width*0.5)) and x < (self.x + (self.width*0.5)):
             if y > (self.y - self.height*0.5) and y < (self.y + (self.height*0.5)):
                 return True
+        return False
 
     def on_mouse_press(self, x, y, button, modifiers):
         if self.active and self.world.state == Resources.states[self.curr_state]:

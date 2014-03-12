@@ -21,6 +21,14 @@ class Resources:
 	window_height = 600
 	center_x,center_y = get_center_coordinates(window_width,window_height)
 
+	# Starting Points of Characters (x,y)
+	starting_points = {}
+
+	starting_points['char_air'] = (center_x,400)
+	starting_points['char_earth'] = (center_x,200)
+	starting_points['char_fire'] = (center_y,100)
+	starting_points['char_water'] = (center_y,200)
+
 	# Object Batches per state #
 	batches = {}
 
@@ -46,3 +54,8 @@ class Resources:
 	sprites['title_bg']				= center_image(image.load(join(res_path,'title_bg.jpg')))
 	sprites['setup_bg']				= center_image(image.load(join(res_path,'setup_bg.jpg')))
 	sprites['game_bg']				= center_image(image.load(join(res_path,'game_bg.jpg')))
+	#Game Elements
+	sprites['char_air']				= center_image(image.load(join(res_path,'char_air.png')))
+	sprites['char_earth']			= center_image(image.load(join(res_path,'char_earth.png')))
+	sprites['char_fire']			= center_image(image.load(join(res_path,'char_fire.png')))
+	sprites['char_water']			= center_image(image.load(join(res_path,'char_water.png')))
