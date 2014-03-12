@@ -14,9 +14,10 @@ class Player(GameObject):
 		self.keys['left'] = False 
 
 	def is_colliding(self,x,y):
-		if x > (self.x - (self.width*0.5)) and x < (self.x + (self.width*0.5)):
-			if y > (self.y - self.height*0.5) and y < (self.y + (self.height*0.5)):
-				return True
+		if self.active:
+			if x > (self.x - (self.width*0.5)) and x < (self.x + (self.width*0.5)):
+				if y > (self.y - self.height*0.5) and y < (self.y + (self.height*0.5)):
+					return True
 		return False
 
 	def set_velocity(self,velocity_x = 1, velocity_y = 1):

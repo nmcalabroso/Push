@@ -35,6 +35,12 @@ cd /my/dir/avbin-linux-x86-64-7
 sudo ./install.sh
 ```
 
+Some machines don't have the simplejson module so on your virtual environment do:
+
+```bash
+pip install simplejson
+```
+
 ### Project
 
 Clone our repository, and switch to that directory (make sure you've been added to the repo as a collaborator. Otherwise, kindly inform me so that I can add you)
