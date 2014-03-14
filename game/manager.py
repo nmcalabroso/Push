@@ -18,7 +18,7 @@ class GameManager(GameObject):
 		self.state = Resources.states['TITLE']
 		self.focus = None
 		self.set_focus(self.find_widget('text_ip'))
-		#self.my_connection = Connection()
+		self.my_connection = Connection()
 
 	def switch_to_setup(self,batch):
 		bg = self.find_widget('my_bg')

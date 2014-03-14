@@ -125,7 +125,7 @@ class TextWidget(UIObject):
             self.world.window.set_mouse_cursor(self.text_cursor)
 
     def on_mouse_press(self, x, y, button, modifiers):
-        if button == mouse.LEFT:
+        if button == mouse.LEFT or button == 0:
             if self.hit_test(x, y):
                 print 'Focusing TextWidget:',self.name
                 self.world.set_focus(self)
