@@ -1,4 +1,5 @@
 from gameobject import GameObject
+from game.resources import Resources
 from pyglet.window import key
 
 class Player(GameObject):
@@ -7,6 +8,7 @@ class Player(GameObject):
 		self.actual_name = actual_name
 		self.velocity_x = 3
 		self.velocity_y = 3
+
 		self.keys = {}
 		self.keys['up'] = False
 		self.keys['down'] = False
@@ -55,3 +57,27 @@ class Player(GameObject):
 			self.y -= self.velocity_y
 
 		print "x,y",(self.x,self.y)
+
+class AirBender(Player):
+	def __init__(self,actual_name,name,*args,**kwargs):
+		super(AirBender,self).__init__(self,actual_name,name,*args,**kwargs)
+		self.img = Resources.sprites['char_air']
+		self.x,self.y = Resources.starting_points['char_air']
+
+class EarthBender(Player):
+	def __init__(self,actual_name,name,*args,**kwargs):
+		super(EarthBender,self).__init__(self,actual_name,name,*args,**kwargs)
+		self.img = Resources.sprites['char_earth']
+		self.x,self.y = Resources.starting_points['char_earth']
+
+class FireBender(Player):
+	def __init__(self,actual_name,name,*args,**kwargs):
+		super(FireBender,self).__init__(self,actual_name,name,*args,**kwargs)
+		self.img = Resources.sprites['char_fire']
+		self.x,self.y = Resources.starting_points['char_fire']
+
+class WaterBender(Player):
+	def __init__(self,actual_name,name,*args,**kwargs):
+		super(WaterBender,self).__init__(self,actual_name,name,*args,**kwargs)
+		self.img = Resources.sprites['char_water']
+		self.x,self.y = Resources.starting_points['char_water']

@@ -1,75 +1,42 @@
-from gameobject import GameObject
-from resources import Resources
+from game.gameobject import GameObject
+from game.resources import Resources
+from game.player import AirBender
+from game.player import FireBender
+from game.player import EarthBender
+from game.player import WaterBender
 from random import randint
 
 class GameWorld(GameObject):
 
 	def __init__(self,*args,**kwargs):
 		super(GameWorld,self).__init__(name = 'World',img = Resources.sprites['no_sprite'], *args,**kwargs)
-		self.game_state = Resources.state['START']
+		self.game_state = Resources.states['GAME']
 		self.game_objects = [] #gameobject pool
 		self.widgets = [] #gui pool
 		self.labels = [] #label pool
-		self.window = None #game window
-		self.active = True
-		self.visible = False
-		self.cursor_name = 'default_cursor'
-		self.focus = None
-		self.set_focus(None)
-
-	def switch_to_player(self,batch):
-		bg = self.find_widget('my_bg')
-		bg.set_image(Resources.sprites['title_bg'])
-		self.delete_widgets_by_batch(batch)
-		self.game_state = Resources.state['PLAYER']
-
-	def switch_to_game(self,batch):
-		bg = self.find_widget('my_bg')
-		bg.set_image(Resources.sprites['title_bg'])
-		self.set_player_names()
-		self.delete_widgets_by_batch(batch)
-		self.delete_labels_by_batch(batch)
-		self.game_state = Resources.state['GAME']
-		self.start_round = True
 
 	def switch_to_end(self):
 		pass
 
-	def set_player_names(self):
-		p1 = self.find_game_object('Player1')
-		p1.actual_name = self.find_widget('text_p1').document.text
-		p2 = self.find_game_object('Player2')
-		p2.actual_name = self.find_widget('text_p2').document.text
+	def set_players(self):
+		pass
 
-		print "Player Names:"
-		print "Player1:",p1.actual_name
-		print "Player2:",p2.actual_name
-		
-	def set_window(self,window):
-		self.window = window
+	def add_player(self,name):
+		num = randint(0,3)
+		if num is 0:
+			p = AirBender('playerX',actual_name = name)
+		elif num is 1:
+			p = FireBender('playerY',actual_name = name)
+		elif num is 2:
+			p = EarthBender('playerZ',actual_name = name)
+		elif num is 3:
+			p = WaterBender('player0',actual_name = name)
 
-	def set_focus(self,focus):
-		if self.focus:
-			self.focus.caret.visible = False
-			self.focus.caret.mark = self.focus.caret.position = 0
-		
-		self.focus = focus
-		
-		if self.focus:
-			self.focus.caret.visible = True
-			self.focus.caret.mark = 0
-			self.focus.caret.position = len(self.focus.document.text)
+		self.add_game_object(p)
 
 	def add_game_object(self,obj):
 		obj.active = True
 		self.game_objects.append(obj)
-
-	def find_game_objects(self,name):
-		found_objects = []
-		for obj in self.game_objects:
-			if obj.name == name:
-				found_objects.append(obj)
-		return found_objects
 
 	def find_game_object(self,name):
 		for obj in self.game_objects:
@@ -108,6 +75,12 @@ class GameWorld(GameObject):
 			if label.name == name:
 				return label
 
+	def get_labels(self,batch):
+		new_labels = []
+		for label in self.labels:
+			if label.batch is batch:
+				new_labels.append(label)
+
 	def delete_label(self,text):
 		for i in range(len(self.labels)):
 			if self.labels[i].text == text:
@@ -115,12 +88,6 @@ class GameWorld(GameObject):
 				label.delete()
 				del self.labels[i]
 				break
-
-	def get_labels(self,batch):
-		new_labels = []
-		for label in self.labels:
-			if label.batch is batch:
-				new_labels.append(label)
 
 	def delete_labels_by_batch(self,batch):
 		delete_labels = []
@@ -157,16 +124,6 @@ class GameWorld(GameObject):
 					new_pool.append(obj)
 		return new_pool
 
-	def get_text_widgets(self,active = True):
-		new_pool = []
-		for obj in self.widgets:
-			if obj.name != 'my_bg' and obj.__class__.__name__ == 'TextWidget':
-				if active and obj.active:
-					new_pool.append(obj)
-				elif not active and not obj.active:
-					new_pool.append(obj)
-		return new_pool
-
 	def get_widgets_by_batch(self,batch):
 		new_pool = []
 		for widget in self.widgets:
@@ -191,9 +148,3 @@ class GameWorld(GameObject):
 			self.window.remove_handlers(widget)
 			widget.delete()
 			self.widgets.remove(widget)
-
-	def on_mouse_motion(self,x,y,dx,dy):
-		self.window.set_mouse_cursor(None)
-		
-	def update(self,dt): #game logic loop
-		pass
