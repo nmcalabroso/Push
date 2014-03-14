@@ -57,8 +57,11 @@ class GameManager(GameObject):
 			text_name = self.find_widget('text_name')
 
 			ip_address = text_ip.document.text
-			port_num = text_port.document.text
+			port_num = int(text_port.document.text)
 			name = text_name.document.text
+			print ip_address, port_num
+			self.my_connection.connect_client((ip_address,port_num))
+
 		else:
 			text_port = self.find_widget('text_port1')
 			text_name = self.find_widget('text_name1')
