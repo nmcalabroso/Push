@@ -1,4 +1,5 @@
 import socket
+import simplejson as json
 
 class Connection:
 	def __init__(self):
@@ -11,10 +12,15 @@ class Connection:
 		pass
 
 	def send_message(self,message):
-		pass
+		#self.test = message
+		to_json = json.dumps(message)
+ 		self.my_socket.send(to_json)
 
 	def receive_message(self):
-		pass
+		to_string = self.my_socket.recv(1024)
+		if len(to_string) > 0:
+			return json.loads(to_string)
+		return ''
 
 # class _myConnection(object):
 

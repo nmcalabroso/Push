@@ -3,6 +3,7 @@ from resources import Resources
 from connection import Connection
 from game.player import Player
 
+
 class GameManager(GameObject):
 
 	def __init__(self,*args,**kwargs):
@@ -52,14 +53,26 @@ class GameManager(GameObject):
 
 	def set_player_data(self):
 		if self.state == Resources.states['JOIN']:
+			#player = Player(actual_name='sample',name='192.168.0.104',img = Resources.sprites['char_air'], x = 100, y = 200)
+
 			text_ip = self.find_widget('text_ip')
 			text_port = self.find_widget('text_port')
 			text_name = self.find_widget('text_name')
 
-			ip_address = text_ip.document.text
-			port_num = int(text_port.document.text)
+			ip_address = '192.168.0.107'#text_ip.document.text
+			port_num = 8080#int(text_port.document.text)
 			name = text_name.document.text
 			self.my_connection.connect_client((ip_address,port_num))
+
+			player_class = "air"
+			player_x = 100
+			player_y = 200
+			player_actual_name = "actual"
+			player_name = "id"
+
+			player_attr = [player_class,(player_x,player_y),player_actual_name,player_name]
+
+			self.my_connection.send_message(player_attr)
 
 		else:
 			text_port = self.find_widget('text_port1')
@@ -145,6 +158,12 @@ class GameManager(GameObject):
 				obj.delete()
 				del self.game_objects[i]
 				break
+
+	def delete_game_object_by_batch(self):
+		for i in range(len(self.game_objects)):
+			obj = self.game_objects[i]
+			obj.delete()
+			del self.game_objects[i]
 
 	def add_label(self,label):
 		self.labels.append(label)
@@ -243,5 +262,16 @@ class GameManager(GameObject):
 
 	def update(self,dt):
 		if self.state == Resources.states['GAME']:
-			for obj in self.get_game_objects():
-				obj.update(dt)
+			player_attr = self.my_connection.receive_message()
+			if player_attr != '':
+				player_class,player_coordinates,player_actual_name,player_name = player_attr
+				player = Player(actual_name=player_actual_name,name=player_name,img = Resources.sprites['char_air'], x = player_coordinates[0], y = player_coordinates[1])
+				self.add_game_object(player)
+				# self.window.push_handlers(player)
+				for obj in self.get_game_objects():
+					obj.update(dt)
+
+				# print player.keys['up']
+				# if player.keys['up'] == True or player.keys['down'] == True or player.keys['left'] == True or player.keys['right'] == True:
+				# 	print 'asdkflasjdf'
+				# 	self.delete_game_object_by_batch()
