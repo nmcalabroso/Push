@@ -2,8 +2,8 @@ import socket
 import time
 import sys
 import select
-import simplejson as json
 from server.world import GameWorld
+import simplejson as json
 
 delay = 0
 buffer_size = 2000
@@ -28,18 +28,30 @@ class Server:
 		pass
 
 	def receive_message(self,client):
-		pass
+		msg = client.recv(buffer_size)
+
+		if len(msg) is 0:
+			self.close(client)
+			return None
+
+		return json.loads(msg)
 
 	def accept(self):
 		remote_socket, addr = self.my_socket.accept()
-		print "Client "+ addr[0] +" has connected."
-		self.world.add_player(addr[0])
 		self.clients.append(remote_socket)
+		name = addr[0] + "!" + str(addr[1])
+		print "Client "+ name +" has connected."
+		
+		print "Creating game object..."
+		player = self.receive_message(remote_socket)
+		player[3] = name
+		self.world.add_player(player)
 
 	def close(self,client):
 		addr = client.getpeername()
 		print "%s has  disconnected" % addr[0]
 		self.clients.remove(client)
+		#self.world.delete_game_object(clientsname)
 
 	def start(self,backlog=5): #main loop
 		self.my_socket.listen(backlog)
@@ -54,8 +66,4 @@ class Server:
 				if s is self.my_socket:
 					self.accept()
 				else:
-					self.data = s.recv(buffer_size)
-					if len(self.data) == 0:
-						self.close(s)
-					else:
-						self.receive_message(s)
+					self.data = self.receive_message(s)
