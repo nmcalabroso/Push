@@ -4,7 +4,6 @@ from game.player import AirBender
 from game.player import FireBender
 from game.player import EarthBender
 from game.player import WaterBender
-from random import randint
 
 class GameWorld(GameObject):
 
@@ -21,16 +20,38 @@ class GameWorld(GameObject):
 	def set_players(self):
 		pass
 
-	def add_player(self,name):
-		num = randint(0,3)
-		if num is 0:
-			p = AirBender('playerX',actual_name = name)
-		elif num is 1:
-			p = FireBender('playerY',actual_name = name)
-		elif num is 2:
-			p = EarthBender('playerZ',actual_name = name)
-		elif num is 3:
-			p = WaterBender('player0',actual_name = name)
+	def add_player(self,player):
+		print "player:",player
+		cl = player[0]
+		x,y = player[1]
+		actual_name = player[2]
+		name_id = player[3]
+
+		if cl.lower() == 'air':
+			p = AirBender(actual_name = actual_name,
+						name = name_id,
+						img = Resources.sprites['char_air'],
+						x = x,
+						y = y)
+		elif cl.lower() == 'fire':
+			p = FireBender(actual_name = actual_name,
+						name = name_id,
+						img = Resources.sprites['char_fire'],
+						x = x,
+						y = y)
+
+		elif cl.lower() == 'earth':
+			p = EarthBender(actual_name = actual_name,
+						name = name_id,
+						img = Resources.sprites['char_air'],
+						x = x,
+						y = y)
+		elif cl.lower() == 'water':
+			p = WaterBender(actual_name = actual_name,
+						name = name_id,
+						img = Resources.sprites['char_air'],
+						x = x,
+						y = y)
 
 		self.add_game_object(p)
 

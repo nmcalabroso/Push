@@ -60,24 +60,23 @@ class Player(GameObject):
 
 class AirBender(Player):
 	def __init__(self,actual_name,name,*args,**kwargs):
-		super(AirBender,self).__init__(self,actual_name,name,*args,**kwargs)
-		self.img = Resources.sprites['char_air']
+		super(AirBender,self).__init__(actual_name = actual_name,
+									name = name,
+									*args,
+									**kwargs)
 		self.x,self.y = Resources.starting_points['char_air']
 
 class EarthBender(Player):
 	def __init__(self,actual_name,name,*args,**kwargs):
-		super(EarthBender,self).__init__(self,actual_name,name,*args,**kwargs)
-		self.img = Resources.sprites['char_earth']
+		super(EarthBender,self).__init__(actual_name,name,*args,**kwargs)
 		self.x,self.y = Resources.starting_points['char_earth']
 
 class FireBender(Player):
 	def __init__(self,actual_name,name,*args,**kwargs):
-		super(FireBender,self).__init__(self,actual_name,name,*args,**kwargs)
-		self.img = Resources.sprites['char_fire']
+		super(FireBender,self).__init__(actual_name,name,*args,**kwargs)
 		self.x,self.y = Resources.starting_points['char_fire']
 
 class WaterBender(Player):
 	def __init__(self,actual_name,name,*args,**kwargs):
-		super(WaterBender,self).__init__(self,actual_name,name,*args,**kwargs)
-		self.img = Resources.sprites['char_water']
+		super(WaterBender,self).__init__(actual_name,name,*args,**kwargs)
 		self.x,self.y = Resources.starting_points['char_water']
