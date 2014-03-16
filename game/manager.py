@@ -2,6 +2,7 @@ from gameobject import GameObject
 from resources import Resources
 from connection import Connection
 from game.player import Player
+import random
 
 
 class GameManager(GameObject):
@@ -64,10 +65,10 @@ class GameManager(GameObject):
 			name = text_name.document.text
 			self.my_connection.connect_client((ip_address,port_num))
 
-			#temp attributes
+			#attributes
 			player_class = "air"
-			player_x = 100
-			player_y = 200
+			player_x = random.randint(0,1080)
+			player_y = random.randint(0,600)
 			player_actual_name = "actual"
 			player_name = "id"
 
