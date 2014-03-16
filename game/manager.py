@@ -59,11 +59,12 @@ class GameManager(GameObject):
 			text_port = self.find_widget('text_port')
 			text_name = self.find_widget('text_name')
 
-			ip_address = '192.168.0.107'#text_ip.document.text
+			ip_address = '127.0.0.1'#text_ip.document.text
 			port_num = 8080#int(text_port.document.text)
 			name = text_name.document.text
 			self.my_connection.connect_client((ip_address,port_num))
 
+			#temp attributes
 			player_class = "air"
 			player_x = 100
 			player_y = 200
