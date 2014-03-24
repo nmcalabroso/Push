@@ -1,5 +1,6 @@
 from pyglet.graphics import Batch
 from pyglet import image
+from pyglet import media
 from pyglet import window
 from os.path import join
 
@@ -41,6 +42,12 @@ class Resources:
 	# End of Batches
 
 	# Declare all of your assets here #
+	audio = {}
+	sfx_path = './assets/sfx'
+
+	#Sound Effects
+	audio['ost'] 					= media.load(join(sfx_path,"ost.mp3"))
+
 	sprites = {}
 	res_path = './assets/img'
 

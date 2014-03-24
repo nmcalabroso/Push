@@ -29,6 +29,7 @@ end_batch = Resources.batches['end']
 
 my_bg = Background(name = 'my_bg',
 				img =  Resources.sprites['title_bg'])
+my_music = Resources.audio['ost']
 
 @game_window.event
 def on_draw():
@@ -57,6 +58,8 @@ def update(dt):
 
 #<-- States -->
 def title_screen():
+	my_music.play()
+	
 	# Instantiation section #
 	play_button = Button(name = 'start_button',
 						curr_state = 'TITLE',
@@ -269,6 +272,7 @@ def main():
 	game_screen()
 	end_screen()
 
+	manager.audio = my_music
 	manager.add_widget(my_bg)
 	game_window.push_handlers(manager)
 	#Pyglet Settings

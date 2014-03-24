@@ -14,14 +14,18 @@ class GameManager(GameObject):
 		self.game_objects = [] #gameobject pool
 		self.widgets = [] #gui pool
 		self.labels = [] #label pool
+		self.audio = None
+		
 		self.window = None
 		self.active = True
 		self.visible = False
+		
 		self.state = Resources.states['TITLE']
 		self.focus = None
 		self.set_focus(self.find_widget('text_ip'))
 		self.my_connection = Connection()
 
+	#State transitions
 	def switch_to_setup(self,batch):
 		bg = self.find_widget('my_bg')
 		bg.set_image(Resources.sprites['setup_bg'])
@@ -60,9 +64,12 @@ class GameManager(GameObject):
 			text_port = self.find_widget('text_port')
 			text_name = self.find_widget('text_name')
 
-			ip_address = '127.0.0.1'#text_ip.document.text
-			port_num = 8080#int(text_port.document.text)
+			#ip_address = '127.0.0.1'#text_ip.document.text
+			#port_num = 8080#int(text_port.document.text)
+			ip_address = text_ip.text
+			port_num = text_port.text
 			name = text_name.document.text
+
 			self.my_connection.connect_client((ip_address,port_num))
 
 			#attributes
@@ -103,6 +110,7 @@ class GameManager(GameObject):
 	def switch_to_end(self):
 		pass
 
+	#Utilities
 	def set_player_names(self):
 		pass
 		
@@ -262,6 +270,7 @@ class GameManager(GameObject):
 	def on_mouse_motion(self,x,y,dx,dy):
 		self.window.set_mouse_cursor(None)
 
+	#Game Logic
 	def update(self,dt):
 		if self.state == Resources.states['GAME']:
 			player_attr = self.my_connection.receive_message()
