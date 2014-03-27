@@ -14,14 +14,18 @@ class GameManager(GameObject):
 		self.game_objects = [] #gameobject pool
 		self.widgets = [] #gui pool
 		self.labels = [] #label pool
+		self.audio = None
+		
 		self.window = None
 		self.active = True
 		self.visible = False
+		
 		self.state = Resources.states['TITLE']
 		self.focus = None
 		self.set_focus(self.find_widget('text_ip'))
 		self.my_connection = Connection()
 
+	#State transitions
 	def switch_to_setup(self,batch):
 		bg = self.find_widget('my_bg')
 		bg.set_image(Resources.sprites['setup_bg'])
@@ -41,9 +45,6 @@ class GameManager(GameObject):
 		bg.set_image(Resources.sprites['game_bg'])
 		self.set_player_data()
 
-		self.delete_widgets_by_batch(batch)
-		self.delete_labels_by_batch(batch)
-
 		self.delete_widgets_by_batch(Resources.batches['host'])
 		self.delete_labels_by_batch(Resources.batches['host'])	
 
@@ -55,14 +56,14 @@ class GameManager(GameObject):
 	def set_player_data(self):
 		if self.state == Resources.states['JOIN']:
 			#player = Player(actual_name='sample',name='192.168.0.104',img = Resources.sprites['char_air'], x = 100, y = 200)
-
 			text_ip = self.find_widget('text_ip')
 			text_port = self.find_widget('text_port')
 			text_name = self.find_widget('text_name')
 
-			ip_address = '127.0.0.1'#text_ip.document.text
-			port_num = 8080#int(text_port.document.text)
+			ip_address = text_ip.document.text
+			port_num = int(text_port.document.text)
 			name = text_name.document.text
+
 			self.my_connection.connect_client((ip_address,port_num))
 
 			#attributes
@@ -75,9 +76,9 @@ class GameManager(GameObject):
 			player_attr = [player_class,(player_x,player_y),player_actual_name,player_name]
 
 			self.my_connection.send_message(player_attr)
-
 		else:
-			text_port = self.find_widget('text_port1')
+			#for actual host module
+			"""text_port = self.find_widget('text_port1')
 			text_name = self.find_widget('text_name1')
 
 			ip_address = "None"
@@ -93,16 +94,38 @@ class GameManager(GameObject):
 							)
 
 			self.add_game_object(my_player)
-			self.window.push_handlers(my_player)
+			self.window.push_handlers(my_player)"""
+
+			#debug mode
+			text_ip = "127.0.0.1"
+			text_port = "8080"
+			text_name = "DebugX"
+
+			ip_address = text_ip
+			port_num = int(text_port)
+			name = text_name
+
+			self.my_connection.connect_client((ip_address,port_num))
+
+			#attributes
+			player_class = "air"
+			player_x = random.randint(0,1080)
+			player_y = random.randint(0,600)
+			player_actual_name = "actual"
+			player_name = "id"
+
+			player_attr = [player_class,(player_x,player_y),player_actual_name,player_name]
+
+			self.my_connection.send_message(player_attr)
 			
 		print "IP Address:",ip_address
 		print "Port:",port_num
 		print "Name:",name
-		print self.game_objects
 
 	def switch_to_end(self):
 		pass
 
+	#Utilities
 	def set_player_names(self):
 		pass
 		
@@ -262,6 +285,7 @@ class GameManager(GameObject):
 	def on_mouse_motion(self,x,y,dx,dy):
 		self.window.set_mouse_cursor(None)
 
+	#Game Logic
 	def update(self,dt):
 		if self.state == Resources.states['GAME']:
 			player_attr = self.my_connection.receive_message()
