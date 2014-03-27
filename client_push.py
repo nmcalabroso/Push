@@ -7,7 +7,7 @@ from game.gui import Background
 from game.gui import Button
 from game.gui import TextWidget
 from game.gui import UILabel
-from game.manager import GameManager
+from client.manager import GameManager
 from game.resources import Resources
 
 game_window = Window(Resources.window_width, Resources.window_height)
@@ -44,6 +44,7 @@ def on_draw():
 		join_batch.draw()
 	elif manager.state == Resources.states['GAME']:
 		game_batch.draw() #only UI elements
+		
 		#drawing the actual game elements
 		for obj in manager.get_game_objects():
 			obj.draw()

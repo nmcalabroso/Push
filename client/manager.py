@@ -1,5 +1,5 @@
-from gameobject import GameObject
-from resources import Resources
+from game.gameobject import GameObject
+from game.resources import Resources
 from connection import Connection
 from game.player import Player
 import random
