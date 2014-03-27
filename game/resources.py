@@ -2,6 +2,7 @@ from pyglet.graphics import Batch
 from pyglet import image
 from pyglet import media
 from pyglet import window
+from pyglet import font
 from os.path import join
 
 def get_center_coordinates(window_width,window_height):
@@ -43,6 +44,14 @@ class Resources:
 	# End of Batches
 
 	# Declare all of your assets here #
+	fonts = {}
+	fonts_path = './assets/font'
+	font.add_file(join(fonts_path,"nexa.otf"))
+
+	fonts['nexa']					= font.load('Nexa Bold')
+
+
+
 	audio = {}
 	sfx_path = './assets/sfx'
 
@@ -50,19 +59,22 @@ class Resources:
 	audio['title_bgm'] 				= media.load(join(sfx_path,"title_bgm.mp3"))
 	audio['setup_bgm']				= media.load(join(sfx_path,"setup_bgm.mp3"))
 	audio['game_bgm']				= media.load(join(sfx_path,"game_bgm.mp3"))
+	audio['button']					= media.load(join(sfx_path,"button.wav"),streaming=False)
+
 
 	sprites = {}
 	res_path = './assets/img'
 
 	#UI Elements
 	sprites['no_sprite'] 			= image.load(join(res_path,'blank.png'))
-	sprites['play_button']			= center_image(image.load(join(res_path,'play_button.png')))
-	sprites['start_button']			= center_image(image.load(join(res_path,'start_button.png')))
-	sprites['host_button']			= center_image(image.load(join(res_path,'host_button.png')))
-	sprites['join_button']			= center_image(image.load(join(res_path,'join_button.png')))
+	sprites['start_button']			= center_image(image.load(join(res_path,'start_button.gif')))
+	#sprites['start_button_mv']		= image.load_animation(join(res_path,'start_button.gif'))
+	sprites['play_button']			= center_image(image.load(join(res_path,'play_button.gif')))
+	sprites['host_button']			= center_image(image.load(join(res_path,'debug_button.gif')))
+	sprites['join_button']			= center_image(image.load(join(res_path,'join_button.gif')))
 	#Backgrounds
 	sprites['title_bg']				= center_image(image.load(join(res_path,'title_bg.jpg')))
-	sprites['setup_bg']				= center_image(image.load(join(res_path,'setup_bg.jpg')))
+	sprites['setup_bg']				= center_image(image.load(join(res_path,'title_bg.jpg')))
 	sprites['game_bg']				= center_image(image.load(join(res_path,'game_bg.jpg')))
 	#Game Elements
 	sprites['char_air']				= center_image(image.load(join(res_path,'char_air.png')))

@@ -53,7 +53,7 @@ def on_draw():
 	elif manager.state == Resources.states['END']:
 		end_batch.draw()
 
-	fps.draw()
+	#fps.draw()
 
 def update(dt):
 	manager.update(dt)
@@ -83,23 +83,25 @@ def title_screen():
 
 def setup_screen():
 	# Instantiation section #
-	host_button = Button(name = 'host_button',
-						curr_state = 'SETUP',
-						target_state = 'HOST',
-						world = manager,
-						img = Resources.sprites['host_button'],
-						x = Resources.window_width*0.5 + 200,
-						y = Resources.window_height*0.6,
-						batch = setup_batch)
-
 	join_button = Button(name = 'join_button',
 						curr_state = 'SETUP',
 						target_state = 'JOIN',
 						world = manager,
 						img = Resources.sprites['join_button'],
-						x = host_button.x,
-						y = host_button.y - 65,
+						x = Resources.window_width*0.5,
+						y = Resources.window_height*0.6,
 						batch = setup_batch)
+
+	host_button = Button(name = 'host_button',
+						curr_state = 'SETUP',
+						target_state = 'HOST',
+						world = manager,
+						img = Resources.sprites['host_button'],
+						x = join_button.x,
+						y = join_button.y-60,
+						batch = setup_batch)
+
+	
 	# End of Instantiation #
 
 	# Handler specification #
@@ -142,7 +144,6 @@ def join_screen():
 					x = x1,
 					y = y1,
 					anchor_y = 'bottom',
-                  	color = (57, 255, 20, 255),
                   	batch = join_batch)
 
 	text_p1 = TextWidget(text = '',
@@ -178,7 +179,6 @@ def join_screen():
 					x = input_p2.x,
 					y = input_p2.y-50,
 					anchor_y = 'bottom',
-                  	color = (57, 255, 20, 255),
                   	batch = join_batch)
 
 	text_p3 = TextWidget(text = '',
@@ -196,7 +196,7 @@ def join_screen():
 						target_state = 'GAME',
 						world = manager,
 						img = Resources.sprites['start_button'],
-					   	x = input_p3.x+120,
+					   	x = input_p3.x+110,
 						y = input_p3.y-50,
 					   	batch = join_batch)
 
