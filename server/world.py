@@ -1,5 +1,6 @@
 from game.gameobject import GameObject
 from game.resources import Resources
+from game.player import Player
 from game.player import AirBender
 from game.player import FireBender
 from game.player import EarthBender
@@ -169,3 +170,12 @@ class GameWorld(GameObject):
 			self.window.remove_handlers(widget)
 			widget.delete()
 			self.widgets.remove(widget)
+
+	def get(self):
+		wrld = []
+		for obj in self.get_game_objects():
+			if isintance(obj,Player):
+				e = [obj.type,[obj.x,obj.y]]
+				wrld.append(e)
+		print "wrld:",wrld
+		return wrld

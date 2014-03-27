@@ -1,6 +1,8 @@
 import socket
 import simplejson as json
 
+buffer_size = 2000
+
 class Connection:
 	def __init__(self):
 		self.my_socket = socket.socket()
@@ -14,11 +16,10 @@ class Connection:
 
 	def send_message(self,message):
 		to_json = json.dumps(message)
-		self.test = to_json
  		self.my_socket.send(to_json)
 
 	def receive_message(self):
-		to_string = self.test#self.my_socket.recv(1024)
+		to_string = self.my_socket.recv(buffer_size)
 		if len(to_string) > 0:
 			return json.loads(to_string)
 		return ''

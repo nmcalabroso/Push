@@ -47,6 +47,8 @@ class Server:
 		player = self.receive_message(remote_socket)
 		player.append(name)
 		self.world.add_player(player)
+		print "OK!"
+		self.send_message(remote_socket,"OK!")
 
 	def close(self,client):
 		addr = client.getpeername()
@@ -61,9 +63,14 @@ class Server:
 			time.sleep(delay)
 			print "Before waiting..."
 			print "clients:",self.clients
-			inputr, outputr, exceptr = select.select(self.clients, [], [])
+			inputr, outputr, exceptr = select.select(self.clients,[],[])
 			for s in inputr:
 				if s is self.my_socket:
 					self.accept()
 				else:
 					self.data = self.receive_message(s) #receive json from client in inputr
+					obj = self.world.find_game_object(self.data[0]) #get obj that has name data[0]
+					obj.move(self.data[1]) #move obj according to the sent key
+					msg = self.world.get()
+					print "msg:",msg
+					self.send_message(s,msg)
