@@ -1,7 +1,7 @@
 from game.gameobject import GameObject
 from game.resources import Resources
 from connection import Connection
-from game.player import Player
+from client.player import Player
 import random
 
 
@@ -289,6 +289,7 @@ class GameManager(GameObject):
 	def update(self,dt):
 		if self.state == Resources.states['GAME']:
 			player_attr = self.my_connection.receive_message()
+			print 'player_attr',player_attr
 			if player_attr != '':
 				player_class,player_coordinates,player_actual_name,player_name = player_attr
 				player = Player(actual_name=player_actual_name,name=player_name,img = Resources.sprites['char_air'], x = player_coordinates[0], y = player_coordinates[1])
