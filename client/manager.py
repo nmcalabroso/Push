@@ -112,7 +112,7 @@ class GameManager(GameObject):
 
 			player_attr = [player_class,(player_x,player_y),player_actual_name]
 			print "Sending player..."
-			if self.my_connection.send_message(player_attr):
+			if self.my_connection.send_message(player_attr) is None:
 				print "Complete!"
 			else:
 				print "Error!"
@@ -287,7 +287,8 @@ class GameManager(GameObject):
 	#Game Logic
 	def update(self,dt):
 		if self.state == Resources.states['GAME']:
-			player_attr = self.my_connection.receive_message()
+			self.my_connection.send_message("HAHAHAHA") #change HAHAHA to ['name',key]
+			player_attr = self.my_connection.receive_message() #receive message in format of [['type',[pos_x,pos_y],'actual_name']...list of objects]
 			if player_attr != '':
 				player_class,player_coordinates,player_actual_name,player_name = player_attr
 				player = Player(actual_name=player_actual_name,name=player_name,img = Resources.sprites['char_air'], x = player_coordinates[0], y = player_coordinates[1])

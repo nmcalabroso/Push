@@ -59,7 +59,7 @@ class Server:
 		self.my_socket.listen(backlog)
 		self.clients.append(self.my_socket)
 		while True:
-			#time.sleep(delay)
+			time.sleep(delay)
 			print "Before waiting..."
 			print "clients:",self.clients
 			inputr, outputr, exceptr = select.select(self.clients,[],[])
