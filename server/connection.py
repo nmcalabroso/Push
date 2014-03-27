@@ -21,12 +21,14 @@ class Server:
 		try:
 			print 'Binding address...'
 			self.my_socket.bind(('',port))
+			#self.my_socket.setblocking(0)
 		except Exception as e:
 			print "Server error!",e
 			sys.exit(1)
 
-	def send_message(self,target_client,message):
-		pass
+	def send_message(self,message):
+		to_json = json.dumps(message)
+ 		self.my_socket.send(to_json)
 
 	def receive_message(self,client):
 		msg = client.recv(buffer_size)
@@ -42,13 +44,12 @@ class Server:
 		self.clients.append(remote_socket)
 		name = addr[0] + "!" + str(addr[1])
 		print "Client "+ name +" has connected."
-		
+		self.send_message("OK1!")
 		print "Creating game object..."
 		player = self.receive_message(remote_socket)
+		#self.send_message(remote_socket,"OK2!")
 		player.append(name)
 		self.world.add_player(player)
-		print "OK!"
-		self.send_message(remote_socket,"OK!")
 
 	def close(self,client):
 		addr = client.getpeername()
@@ -73,4 +74,4 @@ class Server:
 					obj.move(self.data[1]) #move obj according to the sent key
 					msg = self.world.get()
 					print "msg:",msg
-					self.send_message(s,msg)
+					self.send_message(msg)

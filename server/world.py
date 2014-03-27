@@ -174,6 +174,7 @@ class GameWorld(GameObject):
 	def get(self):
 		wrld = []
 		for obj in self.get_game_objects():
+			print "name:",obj.name
 			if isintance(obj,Player):
 				e = [obj.type,[obj.x,obj.y]]
 				wrld.append(e)

@@ -65,7 +65,7 @@ class GameManager(GameObject):
 			port_num = int(text_port.document.text)
 			name = text_name.document.text
 
-			self.my_connection.connect_client((ip_address,port_num))
+			self.my_connection.join_server((ip_address,port_num))
 
 			#attributes
 			player_class = choice(Resources.types)
@@ -104,8 +104,7 @@ class GameManager(GameObject):
 			port_num = int(text_port)
 			name = text_name
 
-			self.my_connection.connect_client((ip_address,port_num))
-
+			self.my_connection.join_server((ip_address,port_num))
 			#attributes
 			player_class = choice(Resources.types)
 			player_x,player_y = randint(5,Resources.window_width-5),randint(5,Resources.window_height-5)
@@ -288,15 +287,6 @@ class GameManager(GameObject):
 			player_attr = self.my_connection.receive_message()
 			print 'player_attr',player_attr
 			if player_attr != '':
-				print "player_att213213r",player_attr
 				player_class,player_coordinates,player_actual_name,player_name = player_attr
 				player = Player(actual_name=player_actual_name,name=player_name,img = Resources.sprites['char_air'], x = player_coordinates[0], y = player_coordinates[1])
 				self.add_game_object(player)
-				# self.window.push_handlers(player)
-				for obj in self.get_game_objects():
-					obj.update(dt)
-
-				# print player.keys['up']
-				# if player.keys['up'] == True or player.keys['down'] == True or player.keys['left'] == True or player.keys['right'] == True:
-				# 	print 'asdkflasjdf'
-				# 	self.delete_game_object_by_batch()
