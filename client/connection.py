@@ -21,7 +21,9 @@ class Connection:
 	def receive_message(self):
 		to_string = self.my_socket.recv(buffer_size)
 		if len(to_string) > 0:
-			return json.loads(to_string)
+			lst = json.loads(to_string)
+			lst.append('asfasd') #temporary
+			return lst
 		return ''
 
 # class _myConnection(object):
