@@ -5,8 +5,8 @@ import select
 from server.world import GameWorld
 import simplejson as json
 
-delay = 0
-buffer_size = 2000
+delay = 1
+buffer_size = 4096
 
 class Server:
 
@@ -26,17 +26,17 @@ class Server:
 			print "Server error!",e
 			sys.exit(1)
 
-	def send_message(self,message):
+	def send_message(self,message,target_client):
 		to_json = json.dumps(message)
- 		self.my_socket.send(to_json)
+ 		#self.my_socket.send(to_json)
+ 		target_client.send(to_json)
+ 		time.sleep(delay)
 
 	def receive_message(self,client):
 		msg = client.recv(buffer_size)
-
 		if len(msg) is 0:
 			self.close(client)
 			return None
-
 		return json.loads(msg)
 
 	def accept(self):
@@ -44,10 +44,8 @@ class Server:
 		self.clients.append(remote_socket)
 		name = addr[0] + "!" + str(addr[1])
 		print "Client "+ name +" has connected."
-		self.send_message("OK1!")
 		print "Creating game object..."
 		player = self.receive_message(remote_socket)
-		#self.send_message(remote_socket,"OK2!")
 		player.append(name)
 		self.world.add_player(player)
 
@@ -61,7 +59,7 @@ class Server:
 		self.my_socket.listen(backlog)
 		self.clients.append(self.my_socket)
 		while True:
-			time.sleep(delay)
+			#time.sleep(delay)
 			print "Before waiting..."
 			print "clients:",self.clients
 			inputr, outputr, exceptr = select.select(self.clients,[],[])
@@ -74,4 +72,4 @@ class Server:
 					obj.move(self.data[1]) #move obj according to the sent key
 					msg = self.world.get()
 					print "msg:",msg
-					self.send_message(msg)
+					self.send_message(msg,s)
