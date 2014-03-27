@@ -286,9 +286,8 @@ class GameManager(GameObject):
 	def update(self,dt):
 		if self.state == Resources.states['GAME']:
 			player_attr = self.my_connection.receive_message()
-			print 'player_attr',player_attr
+			#print 'player_attr',player_attr
 			if player_attr != '':
-				print "player_att213213r",player_attr
 				player_class,player_coordinates,player_actual_name,player_name = player_attr
 				player = Player(actual_name=player_actual_name,name=player_name,img = Resources.sprites['char_air'], x = player_coordinates[0], y = player_coordinates[1])
 				self.add_game_object(player)
