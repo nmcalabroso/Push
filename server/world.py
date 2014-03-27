@@ -171,12 +171,11 @@ class GameWorld(GameObject):
 			widget.delete()
 			self.widgets.remove(widget)
 
-	def get(self):
+	def get(self): #world representation
 		wrld = []
 		for obj in self.get_game_objects():
 			print "name:",obj.name
-			if isintance(obj,Player):
+			if isinstance(obj,Player):
 				e = [obj.type,[obj.x,obj.y]]
 				wrld.append(e)
-		print "wrld:",wrld
 		return wrld

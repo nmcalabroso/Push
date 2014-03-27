@@ -47,7 +47,9 @@ class Resources:
 	sfx_path = './assets/sfx'
 
 	#Sound Effects
-	audio['ost'] 					= media.load(join(sfx_path,"ost.mp3"))
+	audio['title_bgm'] 				= media.load(join(sfx_path,"title_bgm.mp3"))
+	audio['setup_bgm']				= media.load(join(sfx_path,"setup_bgm.mp3"))
+	audio['game_bgm']				= media.load(join(sfx_path,"game_bgm.mp3"))
 
 	sprites = {}
 	res_path = './assets/img'

@@ -1,12 +1,13 @@
 from pyglet.app import run
+from pyglet.media import Player as MediaPlayer
 from pyglet.clock import ClockDisplay
 from pyglet.clock import set_fps_limit
 from pyglet.clock import schedule_interval
 from pyglet.window import Window
-from game.gui import Background
-from game.gui import Button
-from game.gui import TextWidget
-from game.gui import UILabel
+from client.gui import Background
+from client.gui import Button
+from client.gui import TextWidget
+from client.gui import UILabel
 from client.manager import GameManager
 from game.resources import Resources
 
@@ -29,7 +30,7 @@ end_batch = Resources.batches['end']
 
 my_bg = Background(name = 'my_bg',
 				img =  Resources.sprites['title_bg'])
-my_music = Resources.audio['ost']
+mp = MediaPlayer()
 
 @game_window.event
 def on_draw():
@@ -59,7 +60,7 @@ def update(dt):
 
 #<-- States -->
 def title_screen():
-	my_music.play()
+	mp.queue(Resources.audio['title_bgm'])
 	
 	# Instantiation section #
 	play_button = Button(name = 'start_button',
@@ -259,7 +260,7 @@ def join_screen():
 	# End of importation #
 
 def game_screen():
-	pass
+	mp.queue(Resources.audio['game_bgm'])
 
 def end_screen():
 	pass
@@ -273,7 +274,7 @@ def main():
 	game_screen()
 	end_screen()
 
-	manager.audio = my_music
+	manager.set_media(mp)
 	manager.add_widget(my_bg)
 	game_window.push_handlers(manager)
 	#Pyglet Settings

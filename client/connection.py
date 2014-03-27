@@ -11,9 +11,6 @@ class Connection:
 		#self.my_socket.setblocking(0)
 		self.test = ''
 
-	def connect_client(self, configs):
-		self.my_socket.connect(configs)
-
 	def join_server(self,configs):
 		self.my_socket.connect(configs)
 		print "Connection established!"
@@ -36,17 +33,3 @@ class Connection:
 			lst.append('name') #temporary
 			return lst
 		return ''
-
-# class _myConnection(object):
-
-# 	def __init__(self, s):
-# 		self.socket = s
-
-# 	def sendMessage(self, msg):
-# 		return self.socket.send(msg)
-
-# 	def getMessage(self):
-# 		return self.socket.recv(1024)
-
-# def connection(s):
-# 	return _myConnection(s)

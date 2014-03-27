@@ -1,8 +1,8 @@
 import pyglet
-from gameobject import GameObject
 from pyglet.text import Label
 from pyglet.window import mouse
-from resources import Resources
+from game.gameobject import GameObject
+from game.resources import Resources
 
 __docformat__ = 'restructuredtext'
 __version__ = '$Id: $'
@@ -30,7 +30,7 @@ class Button(UIObject):
         if self.active and self.world.state == Resources.states[self.curr_state]:
             if button == mouse.LEFT or button == 0:
                 if self.hit_test(x,y):
-                    print "Button: Proceeding to",self.target_game_state,"STATE."
+                    #print "Button: Proceeding to",self.target_game_state,"STATE."
                     if self.target_game_state == 'SETUP':
                         self.world.switch_to_setup(self.batch)
                     elif self.target_game_state == 'HOST':
@@ -43,7 +43,7 @@ class Button(UIObject):
     def on_mouse_motion(self, x, y, dx, dy):
         if self.active and self.world.state == Resources.states[self.curr_state]:
             if self.hit_test(x,y):
-                print "Entering Button:",self.name
+                #print "Entering Button:",self.name
                 self.world.window.set_mouse_cursor(self.hand_cursor)
 
 class EndTurnButton(UIObject):
@@ -121,13 +121,13 @@ class TextWidget(UIObject):
 
     def on_mouse_motion(self, x, y, dx, dy):
         if self.hit_test(x, y):
-            print 'Hovering TextWidget:',self.name
+            #print 'Hovering TextWidget:',self.name
             self.world.window.set_mouse_cursor(self.text_cursor)
 
     def on_mouse_press(self, x, y, button, modifiers):
         if button == mouse.LEFT or button == 0:
             if self.hit_test(x, y):
-                print 'Focusing TextWidget:',self.name
+                #print 'Focusing TextWidget:',self.name
                 self.world.set_focus(self)
 
         if self.world.focus is self:

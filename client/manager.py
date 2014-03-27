@@ -15,7 +15,7 @@ class GameManager(GameObject):
 		self.game_objects = [] #gameobject pool
 		self.widgets = [] #gui pool
 		self.labels = [] #label pool
-		self.audio = None
+		self.media = None
 		
 		self.window = None
 		self.active = True
@@ -53,6 +53,8 @@ class GameManager(GameObject):
 		self.delete_labels_by_batch(Resources.batches['join'])
 
 		self.state = Resources.states['GAME']
+		self.media.next()
+		self.media.eos_action = self.media.EOS_LOOP
 
 	def set_player_data(self):
 		if self.state == Resources.states['JOIN']:
@@ -125,11 +127,13 @@ class GameManager(GameObject):
 		pass
 
 	#Utilities
-	def set_player_names(self):
-		pass
-		
 	def set_window(self,window):
 		self.window = window
+
+	def set_media(self,media):
+		self.media = media
+		self.media.volume = 0.75
+		self.media.play()
 
 	def set_focus(self,focus):
 		if self.focus:
