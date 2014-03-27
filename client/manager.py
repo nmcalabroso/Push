@@ -111,8 +111,11 @@ class GameManager(GameObject):
 			player_actual_name = name
 
 			player_attr = [player_class,(player_x,player_y),player_actual_name]
-
-			self.my_connection.send_message(player_attr)
+			print "Sending player..."
+			if self.my_connection.send_message(player_attr):
+				print "Complete!"
+			else:
+				print "Error!"
 			
 		print "IP Address:",ip_address
 		print "Port:",port_num
@@ -285,7 +288,6 @@ class GameManager(GameObject):
 	def update(self,dt):
 		if self.state == Resources.states['GAME']:
 			player_attr = self.my_connection.receive_message()
-			print 'player_attr',player_attr
 			if player_attr != '':
 				player_class,player_coordinates,player_actual_name,player_name = player_attr
 				player = Player(actual_name=player_actual_name,name=player_name,img = Resources.sprites['char_air'], x = player_coordinates[0], y = player_coordinates[1])
