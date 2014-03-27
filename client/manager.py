@@ -2,7 +2,8 @@ from game.gameobject import GameObject
 from game.resources import Resources
 from connection import Connection
 from client.player import Player
-import random
+from random import randint
+from random import choice
 
 
 class GameManager(GameObject):
@@ -67,13 +68,11 @@ class GameManager(GameObject):
 			self.my_connection.connect_client((ip_address,port_num))
 
 			#attributes
-			player_class = "air"
-			player_x = random.randint(0,1080)
-			player_y = random.randint(0,600)
-			player_actual_name = "actual"
-			player_name = "id"
+			player_class = choice(Resources.types)
+			player_x,player_y = randint(5,Resources.window_width-5),randint(5,Resources.window_height-5)
+			player_actual_name = name
 
-			player_attr = [player_class,(player_x,player_y),player_actual_name,player_name]
+			player_attr = [player_class,(player_x,player_y),player_actual_name]
 
 			self.my_connection.send_message(player_attr)
 		else:
@@ -108,13 +107,11 @@ class GameManager(GameObject):
 			self.my_connection.connect_client((ip_address,port_num))
 
 			#attributes
-			player_class = "air"
-			player_x = random.randint(0,1080)
-			player_y = random.randint(0,600)
-			player_actual_name = "actual"
-			player_name = "id"
+			player_class = choice(Resources.types)
+			player_x,player_y = randint(5,Resources.window_width-5),randint(5,Resources.window_height-5)
+			player_actual_name = name
 
-			player_attr = [player_class,(player_x,player_y),player_actual_name,player_name]
+			player_attr = [player_class,(player_x,player_y),player_actual_name]
 
 			self.my_connection.send_message(player_attr)
 			
@@ -291,6 +288,7 @@ class GameManager(GameObject):
 			player_attr = self.my_connection.receive_message()
 			print 'player_attr',player_attr
 			if player_attr != '':
+				print "player_att213213r",player_attr
 				player_class,player_coordinates,player_actual_name,player_name = player_attr
 				player = Player(actual_name=player_actual_name,name=player_name,img = Resources.sprites['char_air'], x = player_coordinates[0], y = player_coordinates[1])
 				self.add_game_object(player)

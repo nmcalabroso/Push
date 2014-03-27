@@ -9,6 +9,7 @@ delay = 0
 buffer_size = 2000
 
 class Server:
+
 	def __init__(self,port):
 		self.clients = []
 		self.data = None
@@ -44,7 +45,7 @@ class Server:
 		
 		print "Creating game object..."
 		player = self.receive_message(remote_socket)
-		player[3] = name
+		player.append(name)
 		self.world.add_player(player)
 
 	def close(self,client):
@@ -61,9 +62,8 @@ class Server:
 			print "Before waiting..."
 			print "clients:",self.clients
 			inputr, outputr, exceptr = select.select(self.clients, [], [])
-			print "inputr:",inputr
 			for s in inputr:
 				if s is self.my_socket:
 					self.accept()
 				else:
-					self.data = self.receive_message(s)
+					self.data = self.receive_message(s) #receive json from client in inputr
