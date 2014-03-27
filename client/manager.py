@@ -5,7 +5,6 @@ from client.player import Player
 from random import randint
 from random import choice
 
-
 class GameManager(GameObject):
 
 	def __init__(self,*args,**kwargs):
@@ -58,7 +57,7 @@ class GameManager(GameObject):
 
 	def set_player_data(self):
 		if self.state == Resources.states['JOIN']:
-			#player = Player(actual_name='sample',name='192.168.0.104',img = Resources.sprites['char_air'], x = 100, y = 200)
+			#connect to server mode
 			text_ip = self.find_widget('text_ip')
 			text_port = self.find_widget('text_port')
 			text_name = self.find_widget('text_name')
@@ -66,37 +65,7 @@ class GameManager(GameObject):
 			ip_address = text_ip.document.text
 			port_num = int(text_port.document.text)
 			name = text_name.document.text
-
-			self.my_connection.join_server((ip_address,port_num))
-
-			#attributes
-			player_class = choice(Resources.types)
-			player_x,player_y = randint(5,Resources.window_width-5),randint(5,Resources.window_height-5)
-			player_actual_name = name
-
-			player_attr = [player_class,(player_x,player_y),player_actual_name]
-
-			self.my_connection.send_message(player_attr)
 		else:
-			#for actual host module
-			"""text_port = self.find_widget('text_port1')
-			text_name = self.find_widget('text_name1')
-
-			ip_address = "None"
-			port_num = text_port.document.text
-			name = text_name.document.text
-			x,y = Resources.starting_points['char_air']
-
-			my_player = Player(name = "host_player",
-							actual_name = name,
-							x = x,
-							y = y,
-							img = Resources.sprites['char_air']
-							)
-
-			self.add_game_object(my_player)
-			self.window.push_handlers(my_player)"""
-
 			#debug mode
 			text_ip = "127.0.0.1"
 			text_port = "8080"
@@ -105,20 +74,26 @@ class GameManager(GameObject):
 			ip_address = text_ip
 			port_num = int(text_port)
 			name = text_name
-
-			self.my_connection.join_server((ip_address,port_num))
-			#attributes
-			player_class = choice(Resources.types)
-			player_x,player_y = randint(5,Resources.window_width-5),randint(5,Resources.window_height-5)
-			player_actual_name = name
-
-			player_attr = [player_class,(player_x,player_y),player_actual_name]
-			print "Sending player..."
-			if self.my_connection.send_message(player_attr) is None:
-				print "Complete!"
-			else:
-				print "Error!"
 			
+			
+		#attributes
+		player_class = choice(Resources.types)
+		player_x,player_y = randint(5,Resources.window_width-5),randint(5,Resources.window_height-5)
+		player_actual_name = name
+
+		#connect to server
+		self.my_connection.join_server((ip_address,port_num))
+
+		player_attr = [player_class,(player_x,player_y),player_actual_name]
+		
+		#register player to server
+		print "Sending player..."
+		if self.my_connection.send_message(player_attr) is None:
+			print "Complete!"
+		else:
+			print "Error!"
+
+		#socket details
 		print "IP Address:",ip_address
 		print "Port:",port_num
 		print "Name:",name

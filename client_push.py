@@ -115,68 +115,26 @@ def setup_screen():
 def host_screen():
 	x1 = int((Resources.window_width*0.5))+50
 	y1 = int((Resources.window_height*0.5)+50)
-	
-	input_p2 = UILabel(name = 'label_port1',
-					text = 'Port:',
-					x = x1,
-					y = y1,
-					anchor_y = 'bottom',
-                  	color = (57, 255, 20, 255),
-                  	batch = host_batch)
-
-	text_p2 = TextWidget(text = '',
-						x = input_p2.x+100,
-						y = input_p2.y,
-						width = 250,
-						batch = host_batch,
-						cursor = game_window.get_system_mouse_cursor('text'),
-						curr_state = 'HOST',
-						world = manager,
-						name = 'text_port1')
-
-	input_p3 = UILabel(name = 'label_name1',
-					text = 'Name:',
-					x = input_p2.x,
-					y = input_p2.y-50,
-					anchor_y = 'bottom',
-                  	color = (57, 255, 20, 255),
-                  	batch = host_batch)
-
-	text_p3 = TextWidget(text = '',
-						x = text_p2.x,
-						y = input_p2.y-50,
-						width = 250,
-						batch = host_batch,
-						cursor = game_window.get_system_mouse_cursor('text'),
-						curr_state = 'HOST',
-						world = manager,
-						name = 'text_name1')
 
 	start_button = Button(name = 'start_button1',
 						curr_state = 'HOST',
 						target_state = 'GAME',
 						world = manager,
 						img = Resources.sprites['start_button'],
-					   	x = input_p3.x+120,
-						y = input_p3.y-50,
+					   	x = x1+120,
+						y = y1-50,
 					   	batch = host_batch)
 
 	# Handler specification #
 	game_window.push_handlers(start_button)
-	game_window.push_handlers(text_p2)
-	game_window.push_handlers(text_p3)
 	# End of specification #
 
 	# Importation section #
-	manager.add_label(input_p2)
-	manager.add_label(input_p3)
-	manager.add_widget(text_p2)
-	manager.add_widget(text_p3)
 	manager.add_widget(start_button)
 	# End of importation #
 
 def join_screen():
-	x1 = int((Resources.window_width*0.5))+50
+	x1 = int((Resources.window_width*0.5))+15
 	y1 = int((Resources.window_height*0.5)+50)
 
 	input_p1 = UILabel(name = 'label_ip',
@@ -190,7 +148,7 @@ def join_screen():
 	text_p1 = TextWidget(text = '',
 						x = x1+100,
 						y = y1,
-						width = 250,
+						width = 200,
 						batch = join_batch,
 						cursor = game_window.get_system_mouse_cursor('text'),
 						curr_state = 'JOIN',
@@ -208,7 +166,7 @@ def join_screen():
 	text_p2 = TextWidget(text = '',
 						x = text_p1.x,
 						y = input_p1.y-50,
-						width = 250,
+						width = 200,
 						batch = join_batch,
 						cursor = game_window.get_system_mouse_cursor('text'),
 						curr_state = 'JOIN',
@@ -226,7 +184,7 @@ def join_screen():
 	text_p3 = TextWidget(text = '',
 						x = text_p2.x,
 						y = input_p2.y-50,
-						width = 250,
+						width = 200,
 						batch = join_batch,
 						cursor = game_window.get_system_mouse_cursor('text'),
 						curr_state = 'JOIN',

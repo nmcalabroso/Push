@@ -19,7 +19,7 @@ class Resources:
 	states = {'TITLE':1,'SETUP':2,'HOST':3,'JOIN':4,'GAME':5,'END':6} #game states
 	types = ['air','water','fire','earth'] #player types
 	#positions = [()]
-	window_width = 1080
+	window_width = 800
 	window_height = 600
 	center_x,center_y = get_center_coordinates(window_width,window_height)
 
