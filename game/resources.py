@@ -57,7 +57,6 @@ class Resources:
 
 	#Sound Effects
 	audio['title_bgm'] 				= media.load(join(sfx_path,"title_bgm.mp3"))
-	audio['setup_bgm']				= media.load(join(sfx_path,"setup_bgm.mp3"))
 	audio['game_bgm']				= media.load(join(sfx_path,"game_bgm.mp3"))
 	audio['button']					= media.load(join(sfx_path,"button.wav"),streaming=False)
 
