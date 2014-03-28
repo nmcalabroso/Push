@@ -46,7 +46,7 @@ class Server:
 		print "Client "+ name +" has connected."
 		print "Creating game object..."
 		player = self.receive_message(remote_socket)
-		player[3] = name
+		player[1] = name
 		self.world.add_player(player)
 
 	def close(self,client):
@@ -60,8 +60,8 @@ class Server:
 		self.clients.append(self.my_socket)
 		while True:
 			time.sleep(delay)
-			print "Before waiting..."
-			print "clients:",self.clients
+			#print "Before waiting..."
+			#print "clients:",self.clients
 			inputr, outputr, exceptr = select.select(self.clients,[],[])
 			for s in inputr:
 				if s is self.my_socket:
@@ -73,5 +73,5 @@ class Server:
 						#obj.move(self.data[1]) #move obj according to the sent key
 					my_msg = self.world.get() #get all game objects
 					#print "gameobjects:",self.world.game_objects
-					#print "From world:",my_msg
+					print "From world:",my_msg
 					self.send_message(my_msg,s)

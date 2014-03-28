@@ -84,7 +84,7 @@ class GameManager(GameObject):
 			
 		#attributes
 		player_class = choice(Resources.types)
-		player_x,player_y = randint(5,Resources.window_width-5),randint(5,Resources.window_height-5)
+		player_x,player_y = randint(5+34,Resources.window_width-(5+34)),randint(5+34,Resources.window_height-(5+34))
 		player_actual_name = name
 
 		#connect to server
@@ -276,7 +276,16 @@ class GameManager(GameObject):
 		if self.state == Resources.states['GAME']:
 			self.my_connection.send_message(self.me.represent()) #change HAHAHA to ['name',key]
 			world_objects = self.my_connection.receive_message() #receive message in format of [['type',[pos_x,pos_y],'actual_name']...list of objects]
-			print "world:",world_objects
-			#if world_objects is not None:
-				#player = Player(actual_name=player_actual_name,name=player_name,img = Resources.sprites['char_air'], x = player_coordinates[0], y = player_coordinates[1])
-				#self.add_game_object(player)
+			if world_objects is not None:
+				diff = len(world_objects) - len(self.game_objects)
+				#print "diff:",diff
+				for i in range(diff):
+					obj = world_objects[i+len(self.game_objects)]
+					self.add_game_object(Player(actual_name = obj[0],
+												name = obj[1],
+												typex = obj[2],
+												img = Resources.sprites['char_'+obj[2]],
+												x = obj[3][0],
+												y = obj[3][1]))
+
+

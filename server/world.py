@@ -23,10 +23,11 @@ class GameWorld(GameObject):
 
 	def add_player(self,player):
 		print "player:",player
-		cl = player[0]
-		x,y = player[1]
-		actual_name = player[2]
-		name_id = player[3]
+		
+		actual_name = player[0]
+		name_id = player[1]
+		cl = player[2]
+		x,y = player[3]
 
 		if cl.lower() == 'air':
 			p = AirBender(actual_name = actual_name,
@@ -176,6 +177,6 @@ class GameWorld(GameObject):
 		for obj in self.get_game_objects():
 			#print "name:",obj.name
 			if isinstance(obj,Player):
-				e = [obj.name,obj.type,[obj.x,obj.y]]
-				wrld.append(e)
+				#e = [obj.name,obj.type,[obj.x,obj.y]]
+				wrld.append(obj.get())
 		return wrld

@@ -61,6 +61,10 @@ class Player(GameObject):
 			self.y -= self.velocity_y
 		#print "x,y",(self.x,self.y)
 
+	def get(self):
+		#returns the json format of the player
+		return [self.actual_name,self.name,self.type,[self.x,self.y]]
+
 class AirBender(Player):
 	def __init__(self,actual_name,name,*args,**kwargs):
 		super(AirBender,self).__init__(actual_name = actual_name,name = name,type = 'air',*args,**kwargs)

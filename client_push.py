@@ -220,7 +220,7 @@ def join_screen():
 
 def game_screen():
 	mp.queue(Resources.audio['game_bgm'])
-	i = Player(actual_name = "player",name = "player",img = Resources.sprites['no_sprite'])
+	i = Player(actual_name = "player",name = "player",typex = "air",img = Resources.sprites['no_sprite'])
 	manager.window.push_handlers(i)
 	manager.set_client(i)
 
