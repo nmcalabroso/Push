@@ -5,7 +5,7 @@ import select
 from server.world import GameWorld
 import simplejson as json
 
-delay = 1
+delay = 0.4
 buffer_size = 4096
 
 class Server:
@@ -30,7 +30,7 @@ class Server:
 		to_json = json.dumps(message)
  		#self.my_socket.send(to_json)
  		target_client.send(to_json)
- 		time.sleep(delay)
+ 		time.sleep(delay*0.5)
 
 	def receive_message(self,client):
 		msg = client.recv(buffer_size)
@@ -46,7 +46,7 @@ class Server:
 		print "Client "+ name +" has connected."
 		print "Creating game object..."
 		player = self.receive_message(remote_socket)
-		player.append(name)
+		player[3] = name
 		self.world.add_player(player)
 
 	def close(self,client):
@@ -71,6 +71,7 @@ class Server:
 					#obj = self.world.find_game_object(self.data[0]) #get obj that has name data[0]
 					#if obj is not None:
 						#obj.move(self.data[1]) #move obj according to the sent key
-					msg = self.world.get() #get all game objects
-					print "msg:",msg
-					self.send_message(msg,s)
+					my_msg = self.world.get() #get all game objects
+					#print "gameobjects:",self.world.game_objects
+					#print "From world:",my_msg
+					self.send_message(my_msg,s)

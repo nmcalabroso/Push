@@ -59,25 +59,24 @@ class Player(GameObject):
 			self.x += self.velocity_x
 		elif self.keys['down']:
 			self.y -= self.velocity_y
-
-		print "x,y",(self.x,self.y)
+		#print "x,y",(self.x,self.y)
 
 class AirBender(Player):
 	def __init__(self,actual_name,name,*args,**kwargs):
 		super(AirBender,self).__init__(actual_name = actual_name,name = name,type = 'air',*args,**kwargs)
-		self.x,self.y = Resources.starting_points['char_air']
+		#self.x,self.y = Resources.starting_points['char_air']
 
 class EarthBender(Player):
 	def __init__(self,actual_name,name,*args,**kwargs):
-		super(EarthBender,self).__init__(actual_name,name,type = 'air',*args,**kwargs)
-		self.x,self.y = Resources.starting_points['char_earth']
+		super(EarthBender,self).__init__(actual_name,name,type = 'earth',*args,**kwargs)
+		#self.x,self.y = Resources.starting_points['char_earth']
 
 class FireBender(Player):
 	def __init__(self,actual_name,name,*args,**kwargs):
-		super(FireBender,self).__init__(actual_name,name,type = 'air',*args,**kwargs)
-		self.x,self.y = Resources.starting_points['char_fire']
+		super(FireBender,self).__init__(actual_name,name,type = 'fire',*args,**kwargs)
+		#self.x,self.y = Resources.starting_points['char_fire']
 
 class WaterBender(Player):
 	def __init__(self,actual_name,name,*args,**kwargs):
-		super(WaterBender,self).__init__(actual_name,name,type = 'air',*args,**kwargs)
-		self.x,self.y = Resources.starting_points['char_water']
+		super(WaterBender,self).__init__(actual_name,name,type = 'water',*args,**kwargs)
+		#self.x,self.y = Resources.starting_points['char_water']

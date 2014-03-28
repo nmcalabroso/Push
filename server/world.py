@@ -44,13 +44,13 @@ class GameWorld(GameObject):
 		elif cl.lower() == 'earth':
 			p = EarthBender(actual_name = actual_name,
 						name = name_id,
-						img = Resources.sprites['char_air'],
+						img = Resources.sprites['char_earth'],
 						x = x,
 						y = y)
 		elif cl.lower() == 'water':
 			p = WaterBender(actual_name = actual_name,
 						name = name_id,
-						img = Resources.sprites['char_air'],
+						img = Resources.sprites['char_earth'],
 						x = x,
 						y = y)
 
@@ -174,8 +174,8 @@ class GameWorld(GameObject):
 	def get(self): #world representation
 		wrld = []
 		for obj in self.get_game_objects():
-			print "name:",obj.name
+			#print "name:",obj.name
 			if isinstance(obj,Player):
-				e = [obj.type,[obj.x,obj.y]]
+				e = [obj.name,obj.type,[obj.x,obj.y]]
 				wrld.append(e)
 		return wrld

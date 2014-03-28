@@ -9,6 +9,7 @@ from client.gui import Button
 from client.gui import TextWidget
 from client.gui import UILabel
 from client.manager import GameManager
+from client.player import Player
 from game.resources import Resources
 
 game_window = Window(Resources.window_width, Resources.window_height)
@@ -219,6 +220,9 @@ def join_screen():
 
 def game_screen():
 	mp.queue(Resources.audio['game_bgm'])
+	i = Player(actual_name = "player",name = "player",img = Resources.sprites['no_sprite'])
+	manager.window.push_handlers(i)
+	manager.set_client(i)
 
 def end_screen():
 	pass

@@ -11,11 +11,14 @@ class GameManager(GameObject):
 		super(GameManager,self).__init__(name = 'manager',
 									img = Resources.sprites['no_sprite'],
 									*args,**kwargs)
+		
+		self.me = None
+
 		self.game_objects = [] #gameobject pool
 		self.widgets = [] #gui pool
 		self.labels = [] #label pool
-		self.media = None
 		
+		self.media = None
 		self.window = None
 		self.active = True
 		self.visible = False
@@ -55,6 +58,9 @@ class GameManager(GameObject):
 		self.media.next()
 		self.media.eos_action = self.media.EOS_LOOP
 
+	def switch_to_end(self):
+		pass
+
 	def set_player_data(self):
 		if self.state == Resources.states['JOIN']:
 			#connect to server mode
@@ -84,11 +90,13 @@ class GameManager(GameObject):
 		#connect to server
 		self.my_connection.join_server((ip_address,port_num))
 
-		player_attr = [player_class,(player_x,player_y),player_actual_name]
+		self.me.set_data(player_class,player_actual_name,"temp")
+		self.me.x,self.me.y = player_x,player_y
 		
 		#register player to server
+		print "me:",self.me.get()
 		print "Sending player..."
-		if self.my_connection.send_message(player_attr) is None:
+		if self.my_connection.send_message(self.me.get()) is None:
 			print "Complete!"
 		else:
 			print "Error!"
@@ -98,10 +106,10 @@ class GameManager(GameObject):
 		print "Port:",port_num
 		print "Name:",name
 
-	def switch_to_end(self):
-		pass
-
 	#Utilities
+	def set_client(self,player):
+		self.me = player
+
 	def set_window(self,window):
 		self.window = window
 
@@ -266,9 +274,9 @@ class GameManager(GameObject):
 	#Game Logic
 	def update(self,dt):
 		if self.state == Resources.states['GAME']:
-			self.my_connection.send_message("HAHAHAHA") #change HAHAHA to ['name',key]
-			player_attr = self.my_connection.receive_message() #receive message in format of [['type',[pos_x,pos_y],'actual_name']...list of objects]
-			if player_attr != '':
-				player_class,player_coordinates,player_actual_name,player_name = player_attr
-				player = Player(actual_name=player_actual_name,name=player_name,img = Resources.sprites['char_air'], x = player_coordinates[0], y = player_coordinates[1])
-				self.add_game_object(player)
+			self.my_connection.send_message(self.me.represent()) #change HAHAHA to ['name',key]
+			world_objects = self.my_connection.receive_message() #receive message in format of [['type',[pos_x,pos_y],'actual_name']...list of objects]
+			print "world:",world_objects
+			#if world_objects is not None:
+				#player = Player(actual_name=player_actual_name,name=player_name,img = Resources.sprites['char_air'], x = player_coordinates[0], y = player_coordinates[1])
+				#self.add_game_object(player)
