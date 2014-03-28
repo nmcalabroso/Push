@@ -5,7 +5,7 @@ import select
 from server.world import GameWorld
 import simplejson as json
 
-delay = 0.4
+delay = 0.1
 buffer_size = 4096
 
 class Server:

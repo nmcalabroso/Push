@@ -3,7 +3,7 @@ import simplejson as json
 from time import sleep
 
 buffer_size = 4096
-delay = 0.4
+delay = 0.1
 
 class Connection:
 	def __init__(self):
