@@ -48,15 +48,15 @@ class Server:
 		print "Creating game object..."
 		player = self.receive_message(remote_socket)
 		player[1] = name
-
 		self.send_message(name,remote_socket)
 		self.world.add_player(player)
 
 	def close(self,client):
 		addr = client.getpeername()
 		print "%s has  disconnected" % addr[0]
+		clientsname = addr[0]+"!"+str(addr[1])
 		self.clients.remove(client)
-		#self.world.delete_game_object(clientsname)
+		self.world.delete_game_object(clientsname)
 
 	def start(self,backlog=5): #main loop
 		self.my_socket.listen(backlog)

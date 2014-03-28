@@ -282,13 +282,26 @@ class GameManager(GameObject):
 				x = len(world_objects)
 				y = len(self.game_objects)
 				diff = x - y
-				for i in range(diff):
-					obj = world_objects[i+y]
-					self.add_game_object(Player(actual_name = obj[0],
-												name = obj[1],
-												typex = obj[2],
-												img = Resources.sprites['char_'+obj[2]],
-												x = obj[3][0],
-												y = obj[3][1]))
+				if diff >= 0:
+					#creating of new objects
+					for i in range(diff):
+						print "creating..."
+						obj = world_objects[i+y]
+						self.add_game_object(Player(actual_name = obj[0],
+													name = obj[1],
+													typex = obj[2],
+													img = Resources.sprites['char_'+obj[2]],
+													x = obj[3][0],
+													y = obj[3][1]))
+				else:
+					#deletion of deleted game objects
+					print "deleting..."
+					for i in range(len(world_objects)):
+						while world_objects[i][1] != self.game_objects[i].name:
+							self.delete_game_object(self.game_objects[i].name)
+
+
+
+
 
 
