@@ -281,11 +281,7 @@ class GameManager(GameObject):
 				x = len(world_objects)
 				y = len(self.game_objects)
 				diff = x - y
-				#print "diff:",diff
-				#print "world_objects:",world_objects
-				#print "game_objects:",self.game_objects
 				for i in range(diff):
-					#print 'index:',i+y
 					obj = world_objects[i+y]
 					self.add_game_object(Player(actual_name = obj[0],
 												name = obj[1],
