@@ -37,6 +37,7 @@ class Server:
 		if len(msg) is 0:
 			self.close(client)
 			return None
+		print "recv:",msg
 		return json.loads(msg)
 
 	def accept(self):
@@ -47,6 +48,8 @@ class Server:
 		print "Creating game object..."
 		player = self.receive_message(remote_socket)
 		player[1] = name
+
+		self.send_message(name,remote_socket)
 		self.world.add_player(player)
 
 	def close(self,client):

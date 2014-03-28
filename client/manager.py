@@ -97,6 +97,7 @@ class GameManager(GameObject):
 		print "me:",self.me.get()
 		print "Sending player..."
 		if self.my_connection.send_message(self.me.get()) is None:
+			self.me.name = self.my_connection.receive_message()
 			print "Complete!"
 		else:
 			print "Error!"
@@ -277,10 +278,15 @@ class GameManager(GameObject):
 			self.my_connection.send_message(self.me.represent()) #change HAHAHA to ['name',key]
 			world_objects = self.my_connection.receive_message() #receive message in format of [['type',[pos_x,pos_y],'actual_name']...list of objects]
 			if world_objects is not None:
-				diff = len(world_objects) - len(self.game_objects)
+				x = len(world_objects)
+				y = len(self.game_objects)
+				diff = x - y
 				#print "diff:",diff
+				#print "world_objects:",world_objects
+				#print "game_objects:",self.game_objects
 				for i in range(diff):
-					obj = world_objects[i+len(self.game_objects)]
+					#print 'index:',i+y
+					obj = world_objects[i+y]
 					self.add_game_object(Player(actual_name = obj[0],
 												name = obj[1],
 												typex = obj[2],
