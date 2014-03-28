@@ -37,7 +37,7 @@ class Server:
 		if len(msg) is 0:
 			self.close(client)
 			return None
-		print "recv:",msg
+		#print "recv:",msg
 		return json.loads(msg)
 
 	def accept(self):
