@@ -5,8 +5,8 @@ class Player(GameObject):
 	def __init__(self,actual_name,name,type,*args,**kwargs):
 		super(Player,self).__init__(name = name,*args,**kwargs)
 		self.actual_name = actual_name
-		self.velocity_x = 3
-		self.velocity_y = 3
+		self.velocity_x = 5
+		self.velocity_y = 5
 		self.type = type
 
 		self.keys = {}

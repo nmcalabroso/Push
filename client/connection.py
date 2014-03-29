@@ -2,8 +2,8 @@ import socket
 import simplejson as json
 from time import sleep
 
+delay = 0.0005
 buffer_size = 4096
-delay = 0.1
 
 class Connection:
 	def __init__(self):
