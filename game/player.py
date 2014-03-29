@@ -1,5 +1,4 @@
 from gameobject import GameObject
-from game.resources import Resources
 from pyglet.window import key
 
 class Player(GameObject):
@@ -27,39 +26,19 @@ class Player(GameObject):
 		self.velocity_x = velocity_x
 		self.velocity_y = velocity_y
 
-	def move(self,key):
-		print "Key:",key
-
-	def on_key_press(self,symbol,modifiers):
-		if symbol == key.LEFT:
-			self.keys['left'] = True
-		elif symbol == key.UP:
-			self.keys['up'] = True
-		elif symbol == key.RIGHT:
-			self.keys['right'] = True
-		elif symbol == key.DOWN:
-			self.keys['down'] = True
-
-	def on_key_release(self,symbol,modifiers):
-		if symbol == key.LEFT:
-			self.keys['left'] = False
-		elif symbol == key.UP:
-			self.keys['up'] = False
-		elif symbol == key.RIGHT:
-			self.keys['right'] = False
-		elif symbol == key.DOWN:
-			self.keys['down'] = False
-	
-	def update(self,dt):
-		if self.keys['left']:
-			self.x -= self.velocity_x
-		elif self.keys['up']:
-			self.y += self.velocity_y
-		elif self.keys['right']:
-			self.x += self.velocity_x
-		elif self.keys['down']:
-			self.y -= self.velocity_y
-		#print "x,y",(self.x,self.y)
+	def move(self,keyx):
+		if keyx == key.UP:
+			#print "UP!"
+			self.y+=self.velocity_y
+		elif keyx == key.RIGHT:
+			#print "RIGHT!"
+			self.x+=self.velocity_x
+		elif keyx == key.DOWN:
+			#print "DOWN!"
+			self.y-=self.velocity_y
+		elif keyx == key.LEFT:
+			#print "LEFT!"
+			self.x-=self.velocity_x
 
 	def get(self):
 		#returns the json format of the player

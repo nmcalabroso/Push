@@ -1,6 +1,4 @@
 from game.gameobject import GameObject
-from game.resources import Resources
-from pyglet.window import key
 
 class Player(GameObject):
 	def __init__(self,actual_name,name,typex,*args,**kwargs):
@@ -8,7 +6,7 @@ class Player(GameObject):
 		self.actual_name = actual_name
 		self.name = name
 		self.type = typex
-		self.key = None
+		self.active_key = None
 
 	def set_data(self,typex,actual_name,name):
 		self.type = typex
@@ -21,10 +19,13 @@ class Player(GameObject):
 
 	def represent(self):
 		#returns the regular json format for the position of the player
-		return [self.name,self.key]
+		return [self.name,self.active_key]
 
-	def on_key_press(self,button,modifiers):
-		pass
+	def on_key_press(self,symbol,modifiers):
+		self.active_key = int(symbol)
+
+	def on_key_release(self,symbol,modifiers):
+		self.active_key = None
 
 	def update(self,dt):
 		pass

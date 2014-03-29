@@ -71,9 +71,10 @@ class Server:
 					self.accept()
 				else:
 					self.data = self.receive_message(s) #receive json from client in inputr
-					#obj = self.world.find_game_object(self.data[0]) #get obj that has name data[0]
-					#if obj is not None:
-						#obj.move(self.data[1]) #move obj according to the sent key
+					obj = self.world.find_game_object(self.data[0]) #get obj that has name data[0]
+					if obj is not None:
+						#print "data:",self.data
+						obj.move(self.data[1]) #move obj according to the sent key
 					my_msg = self.world.get() #get all game objects
 					#print "gameobjects:",self.world.game_objects
 					print "From world:",my_msg

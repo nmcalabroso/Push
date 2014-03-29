@@ -58,6 +58,8 @@ class GameManager(GameObject):
 		self.media.next()
 		self.media.eos_action = self.media.EOS_LOOP
 
+		self.window.push_handlers(self.me)
+
 	def switch_to_end(self):
 		pass
 
@@ -73,8 +75,8 @@ class GameManager(GameObject):
 			name = text_name.document.text
 		else:
 			#debug mode
-			#text_ip = "127.0.0.1"
-			text_ip = "192.168.254.103"
+			text_ip = "127.0.0.1"
+			#text_ip = "192.168.254.103"
 			text_port = "8080"
 			text_name = "DebugX"
 
@@ -276,7 +278,8 @@ class GameManager(GameObject):
 	#Game Logic
 	def update(self,dt):
 		if self.state == Resources.states['GAME']:
-			self.my_connection.send_message(self.me.represent()) #change HAHAHA to ['name',key]
+			print "From client:",self.me.represent()
+			self.my_connection.send_message(self.me.represent())
 			world_objects = self.my_connection.receive_message() #receive message in format of [['type',[pos_x,pos_y],'actual_name']...list of objects]
 			if world_objects is not None:
 				x = len(world_objects)
@@ -299,6 +302,10 @@ class GameManager(GameObject):
 					for i in range(len(world_objects)):
 						while world_objects[i][1] != self.game_objects[i].name:
 							self.delete_game_object(self.game_objects[i].name)
+
+				for i in range(len(self.game_objects)):
+					obj = self.game_objects[i]
+					obj.x,obj.y = world_objects[i][3]
 
 
 

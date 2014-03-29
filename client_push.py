@@ -54,8 +54,6 @@ def on_draw():
 	elif manager.state == Resources.states['END']:
 		end_batch.draw()
 
-	#fps.draw()
-
 def update(dt):
 	manager.update(dt)
 
@@ -221,7 +219,6 @@ def join_screen():
 def game_screen():
 	mp.queue(Resources.audio['game_bgm'])
 	i = Player(actual_name = "player",name = "player",typex = "air",img = Resources.sprites['no_sprite'])
-	manager.window.push_handlers(i)
 	manager.set_client(i)
 
 def end_screen():
