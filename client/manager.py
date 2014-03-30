@@ -110,6 +110,8 @@ class GameManager(GameObject):
 		print "Port:",port_num
 		print "Name:",name
 
+	def disconnect(self):
+		self.my_connection.send_message("")
 	#Utilities
 	def set_client(self,player):
 		self.me = player

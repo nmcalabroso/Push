@@ -1,4 +1,5 @@
 from pyglet.app import run
+from pyglet.app import exit
 from pyglet.media import Player as MediaPlayer
 from pyglet.clock import ClockDisplay
 from pyglet.clock import set_fps_limit
@@ -54,8 +55,13 @@ def on_draw():
 	elif manager.state == Resources.states['END']:
 		end_batch.draw()
 
+def on_window_close():
+	manager.disconnect()
+	exit()
+
 def update(dt):
 	manager.update(dt)
+
 
 #<-- States -->
 def title_screen():

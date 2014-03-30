@@ -5,7 +5,7 @@ import select
 from server.world import GameWorld
 import simplejson as json
 
-delay = 0.05
+delay = 0.005
 buffer_size = 4096
 
 class Server:
@@ -34,6 +34,7 @@ class Server:
 
 	def receive_message(self,client):
 		msg = client.recv(buffer_size)
+		
 		if len(msg) is 0:
 			self.close(client)
 			return None
