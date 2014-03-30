@@ -5,7 +5,7 @@ import select
 from server.world import GameWorld
 import simplejson as json
 
-delay = 0.005
+delay = 0.003
 buffer_size = 4096
 
 class Server:
@@ -28,7 +28,6 @@ class Server:
 
 	def send_message(self,message,target_client):
 		to_json = json.dumps(message)
- 		#self.my_socket.send(to_json)
  		target_client.send(to_json)
  		time.sleep(delay*0.5)
 
@@ -64,8 +63,6 @@ class Server:
 		self.clients.append(self.my_socket)
 		while True:
 			time.sleep(delay)
-			#print "Before waiting..."
-			#print "clients:",self.clients
 			inputr, outputr, exceptr = select.select(self.clients,[],[])
 			for s in inputr:
 				if s is self.my_socket:
@@ -74,9 +71,7 @@ class Server:
 					self.data = self.receive_message(s) #receive json from client in inputr
 					obj = self.world.find_game_object(self.data[0]) #get obj that has name data[0]
 					if obj is not None:
-						#print "data:",self.data
 						obj.move(self.data[1]) #move obj according to the sent key
 					my_msg = self.world.get() #get all game objects
-					#print "gameobjects:",self.world.game_objects
 					print "From world:",my_msg
 					self.send_message(my_msg,s)
