@@ -2,7 +2,7 @@ import socket
 import simplejson as json
 from time import sleep
 
-delay = 0.0005
+delay = 0.05
 buffer_size = 4096
 
 class Connection:
