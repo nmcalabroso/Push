@@ -1,5 +1,6 @@
 from gameobject import GameObject
 from pyglet.window import key
+from math import cos,sin
 import resources
 
 class Player(GameObject):
@@ -11,30 +12,40 @@ class Player(GameObject):
 		self.tempy = self.y
 		self.velocity_x = 5
 		self.velocity_y = 5
+		self.accelaration_x = 0
+		self.accelaration_y = 0
+		self.angle = 0
 		self.type = type
 
 		self.bounce = 5 #life
 		self.power = 5 #pushing power
 		self.status = 0 #0 - normal; 1 - dead; 2 - being pushed
 
+	def is_wall(self,mode = 'move'):
+		if self.active:
+			if mode == 'move':
+				pt = (self.tempx,self.tempy)
+			else:
+				pt = self.position
+
+			if pt[0]-(self.width*0.5) <= 0 or pt[0]+(self.width*0.5) >= resources.Resources.window_width:
+				return True
+
+			if pt[1]-(self.height*0.5) <= 0 or pt[1]+(self.height*0.5) >= resources.Resources.window_height:
+				return True
+				
+			return False
 
 	def is_hit(self, obj, mode = 'move'):
 		if self.active:
 			if mode == 'move':
 				pt1 = (obj.tempx,obj.tempy)
 			else:
-				pt1 = self.position
+				pt1 = obj.position
 
 			actual_distance = resources.get_distance(self.position,pt1)
 			collision_distance = 0.5*(self.width+obj.width)
 			return actual_distance <= collision_distance
-
-	def is_colliding(self):
-		lst = []
-		for obj in self.world.game_objects:
-			if self.is_hit(obj):
-				lst.append(obj)
-		return lst
 
 	def set_velocity(self,velocity_x = 1, velocity_y = 1):
 		self.velocity_x = velocity_x
@@ -43,7 +54,8 @@ class Player(GameObject):
 	def die(self):
 		self.status = 1
 
-	def to_pushed(self):
+	def to_be_pushed(self,angle):
+		self.angle = angle
 		self.status = 2
 
 	def change_power(self,dp):
@@ -54,27 +66,35 @@ class Player(GameObject):
 			if obj.name != self.name:
 				if obj.is_hit(self):
 					return False
+
+		if self.is_wall():
+			return False
+
 		return True
 				
 	def move(self,keyx):
 		self.tempx,self.tempy = self.x,self.y
 
-		if keyx == key.UP:
-			self.tempy += self.velocity_y
-		elif keyx == key.RIGHT:
-			self.tempx+=self.velocity_x
-		elif keyx == key.DOWN:
-			self.tempy-=self.velocity_y
-		elif keyx == key.LEFT:
-			self.tempx-=self.velocity_x
+		if keyx == key.UP or keyx == key.RIGHT or keyx == key.DOWN or keyx == key.LEFT:
+			if keyx == key.UP:
+				self.tempy += self.velocity_y
+			elif keyx == key.RIGHT:
+				self.tempx+=self.velocity_x
+			elif keyx == key.DOWN:
+				self.tempy-=self.velocity_y
+			elif keyx == key.LEFT:
+				self.tempx-=self.velocity_x
 
-		if self.to_continue():
-			self.x,self.y = self.tempx,self.tempy
+			if self.to_continue():
+				self.x,self.y = self.tempx,self.tempy
+		else:
+			if keyx == key.SPACE:
+				self.push_collide()
 
 	def push_collide(self):
-		to_push = self.is_colliding()
-		for enemy in to_push:
-			enemy.set_status(2)
+		for obj in self.world.game_objects:
+			if obj.name != self.name:
+				obj.to_be_pushed(resources.get_angle_between(self.position,obj.position))
 
 	def update(self):
 		#colliding_obj = self.is_colliding()
@@ -83,7 +103,9 @@ class Player(GameObject):
 		elif self.status == 1:
 			pass
 		elif self.status == 2:
-			pass
+			self.x += self.velocity_x*cos(self.angle)
+			self.y += self.velocity_y*sin(self.angle)
+			print 
 
 	def get(self):
 		#returns the json format of the player
