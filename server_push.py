@@ -2,7 +2,8 @@ from server.connection import Server
 
 def main():
 	print "PUSH! Server"
-	port = int(raw_input('Enter port number:'))
+	#ort = int(raw_input('Enter port number:'))
+	port = 8080
 	print "Initializing..."
 	s = Server(port)
 	print "Set-up complete."

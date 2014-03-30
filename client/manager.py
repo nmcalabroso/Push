@@ -75,8 +75,8 @@ class GameManager(GameObject):
 			name = text_name.document.text
 		else:
 			#debug mode
-			text_ip = "127.0.0.1"
-			#text_ip = "192.168.254.103"
+			#text_ip = "127.0.0.1"
+			text_ip = "192.168.0.107"
 			text_port = "8080"
 			text_name = "DebugX"
 

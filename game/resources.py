@@ -4,6 +4,7 @@ from pyglet import media
 from pyglet import window
 from pyglet import font
 from os.path import join
+from math import sqrt
 
 def get_center_coordinates(window_width,window_height):
 	screen = window.get_platform().get_default_display().get_default_screen()
@@ -16,6 +17,9 @@ def center_image(image):
 	image.anchor_y = int(image.height*0.5)
 	return image
 
+def get_distance(pt1 = (0,0), pt2 = (0,1)):
+	return sqrt((pt1[0]-pt2[0])**2 + (pt1[1]-pt2[1])**2)
+
 class Resources:
 	states = {'TITLE':1,'SETUP':2,'HOST':3,'JOIN':4,'GAME':5,'END':6} #game states
 	types = ['air','water','fire','earth'] #player types
@@ -25,11 +29,6 @@ class Resources:
 
 	# Starting Points of Characters (x,y)
 	starting_points = {}
-
-	#starting_points['char_air'] = (center_x,400)
-	#starting_points['char_earth'] = (center_x,200)
-	#starting_points['char_fire'] = (center_y,100)
-	#starting_points['char_water'] = (center_y,200)
 
 	# Object Batches per state #
 	batches = {}
@@ -48,8 +47,6 @@ class Resources:
 	font.add_file(join(fonts_path,"nexa.otf"))
 
 	fonts['nexa']					= font.load('Nexa Bold')
-
-
 
 	audio = {}
 	sfx_path = './assets/sfx'
