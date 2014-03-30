@@ -71,5 +71,5 @@ class Server:
 					self.data = self.receive_message(s) #receive json from client in inputr
 					self.world.update(self.data)
 					my_msg = self.world.get() #get all game objects
-					print "From world:",my_msg
+					#print "From world:",my_msg
 					self.send_message(my_msg,s)

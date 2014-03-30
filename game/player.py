@@ -18,11 +18,15 @@ class Player(GameObject):
 		self.status = 0 #0 - normal; 1 - dead; 2 - being pushed
 
 
-	def is_hit(self, obj):
+	def is_hit(self, obj, mode = 'move'):
 		if self.active:
-			actual_distance = resources.get_distance(self.position,obj.position)
+			if mode == 'move':
+				pt1 = (obj.tempx,obj.tempy)
+			else:
+				pt1 = self.position
+
+			actual_distance = resources.get_distance(self.position,pt1)
 			collision_distance = 0.5*(self.width+obj.width)
-			print "actual distance of "+self.actual_name+" and "+obj.actual_name+":",actual_distance
 			return actual_distance <= collision_distance
 
 	def is_colliding(self):
