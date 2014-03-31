@@ -188,5 +188,5 @@ class GameWorld(GameObject):
 	def update(self,data):
 		obj = self.find_game_object(data[0]) #get obj that has name data[0]
 		if obj is not None:
-			obj.move(data[1]) #move obj according to the sent key
+			obj.key_press(data[1]) #move obj according to the sent key
 			obj.update()
