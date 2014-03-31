@@ -41,7 +41,11 @@ class Player(GameObject):
 			if mode == 'move':
 				pt1 = (obj.tempx,obj.tempy)
 			else:
-				pt1 = (self.x+self.velocity_x,self.y+self.velocity_y)
+				pt1 = (obj.x+obj.velocity_x,obj.y+obj.velocity_y)
+				"""print "self:",pt1
+				print "obj:",obj.position
+				print "actual_distance =", resources.get_distance(self.position,pt1)
+				print "collision_distance =",0.5*(self.width+obj.width)"""
 
 			actual_distance = resources.get_distance(self.position,pt1)
 			collision_distance = 0.5*(self.width+obj.width)
@@ -115,6 +119,7 @@ class Player(GameObject):
 	def push_collide(self):
 		for obj in self.world.game_objects:
 			if obj.name != self.name:
+				print obj.name
 				if obj.is_hit(self,mode = "regular"):
 					obj.to_be_pushed(resources.get_angle_between(self.position,obj.position))
 

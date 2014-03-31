@@ -20,15 +20,13 @@ def center_image(image):
 	return image
 
 def get_distance(pt1 = (0,0), pt2 = (0,1)):
-	return int(sqrt((pt1[0]-pt2[0])**2 + (pt1[1]-pt2[1])**2))
+	return sqrt((pt1[0]-pt2[0])**2 + (pt1[1]-pt2[1])**2)
 
 def get_angle_between(pt1 = (0,0), pt2 = (0,1)):
 	x = pt2[0]-pt1[0]
 	y = pt2[1]-pt1[1]
 
 	angle = atan2(y,x)
-
-	#if pt1[1] < pt2[1]: angle -= pi
 
 	return angle
 
