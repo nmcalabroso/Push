@@ -19,7 +19,7 @@ class Player(GameObject):
 
 		self.bounce = 5 #life
 		self.power = 5 #pushing power
-		self.status = 0 #0 - normal; 1 - dead; 2 - being pushed
+		self.status = 3 #0 - moving; 1 - dead; 2 - being pushed; 3 - stop
 
 	def is_wall(self,mode = 'move'):
 		if self.active:
@@ -54,6 +54,9 @@ class Player(GameObject):
 	def die(self):
 		self.status = 1
 
+	def stop(self):
+		self.stop = 3
+
 	def to_be_pushed(self,angle):
 		self.angle = angle
 		self.status = 2
@@ -72,7 +75,7 @@ class Player(GameObject):
 
 		return True
 				
-	def move(self,keyx):
+	def key_press(self,keyx):
 		self.tempx,self.tempy = self.x,self.y
 
 		if keyx == key.UP or keyx == key.RIGHT or keyx == key.DOWN or keyx == key.LEFT:
@@ -91,6 +94,9 @@ class Player(GameObject):
 			if keyx == key.SPACE:
 				self.push_collide()
 
+	def move(self):
+		pass
+
 	def push_collide(self):
 		for obj in self.world.game_objects:
 			if obj.name != self.name:
@@ -98,14 +104,13 @@ class Player(GameObject):
 
 	def update(self):
 		#colliding_obj = self.is_colliding()
-		if self.status == 0:
+		if self.status == 0: #moving
 			pass
-		elif self.status == 1:
+		elif self.status == 1: #dead
 			pass
-		elif self.status == 2:
+		elif self.status == 2: #being push
 			self.x += self.velocity_x*cos(self.angle)
 			self.y += self.velocity_y*sin(self.angle)
-			print 
 
 	def get(self):
 		#returns the json format of the player

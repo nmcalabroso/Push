@@ -179,14 +179,12 @@ class GameWorld(GameObject):
 	def get(self): #world representation
 		wrld = []
 		for obj in self.get_game_objects():
-			#print "name:",obj.name
 			if isinstance(obj,Player):
-				#e = [obj.name,obj.type,[obj.x,obj.y]]
 				wrld.append(obj.get())
 		return wrld
 
 	def update(self,data):
 		obj = self.find_game_object(data[0]) #get obj that has name data[0]
 		if obj is not None:
-			obj.move(data[1]) #move obj according to the sent key
+			obj.key_press(data[1]) #move obj according to the sent key
 			obj.update()
