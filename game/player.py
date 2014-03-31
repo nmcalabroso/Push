@@ -1,65 +1,151 @@
 from gameobject import GameObject
 from pyglet.window import key
+from math import cos,sin
+import resources
 
 class Player(GameObject):
-	def __init__(self,actual_name,name,type,*args,**kwargs):
+	def __init__(self,actual_name,name,world,type,*args,**kwargs):
 		super(Player,self).__init__(name = name,*args,**kwargs)
+		self.world = world
 		self.actual_name = actual_name
+		self.tempx = self.x
+		self.tempy = self.y
 		self.velocity_x = 5
 		self.velocity_y = 5
+		self.accelaration_x = 0
+		self.accelaration_y = 0
+		self.angle = 0
 		self.type = type
 
-		self.keys = {}
-		self.keys['up'] = False
-		self.keys['down'] = False
-		self.keys['right'] = False
-		self.keys['left'] = False 
+		self.bounce = 5 #life
+		self.power = 5 #pushing power
+		self.status = 3 #0 - moving; 1 - dead; 2 - being pushed; 3 - stop
 
-	def is_colliding(self,x,y):
+	def is_wall(self,mode = 'move'):
 		if self.active:
-			if x > (self.x - (self.width*0.5)) and x < (self.x + (self.width*0.5)):
-				if y > (self.y - self.height*0.5) and y < (self.y + (self.height*0.5)):
-					return True
-		return False
+			if mode == 'move':
+				pt = (self.tempx,self.tempy)
+			else:
+				pt = self.position
+
+			if pt[0]-(self.width*0.5) <= 0 or pt[0]+(self.width*0.5) >= resources.Resources.window_width:
+				return True
+
+			if pt[1]-(self.height*0.5) <= 0 or pt[1]+(self.height*0.5) >= resources.Resources.window_height:
+				return True
+				
+			return False
+
+	def is_hit(self, obj, mode = 'move'):
+		if self.active:
+			if mode == 'move':
+				pt1 = (obj.tempx,obj.tempy)
+			else:
+				pt1 = (self.x+self.velocity_x,self.y+self.velocity_y)
+
+			actual_distance = resources.get_distance(self.position,pt1)
+			collision_distance = 0.5*(self.width+obj.width)
+			return actual_distance <= collision_distance
 
 	def set_velocity(self,velocity_x = 1, velocity_y = 1):
 		self.velocity_x = velocity_x
 		self.velocity_y = velocity_y
 
-	def move(self,keyx):
-		if keyx == key.UP:
-			#print "UP!"
-			self.y+=self.velocity_y
-		elif keyx == key.RIGHT:
-			#print "RIGHT!"
-			self.x+=self.velocity_x
-		elif keyx == key.DOWN:
-			#print "DOWN!"
-			self.y-=self.velocity_y
-		elif keyx == key.LEFT:
-			#print "LEFT!"
-			self.x-=self.velocity_x
+	def moving(self):
+		self.status = 0
+
+	def die(self):
+		self.status = 1
+
+	def to_be_pushed(self,angle):
+		self.angle = angle
+		self.status = 2
+
+	def stop(self):
+		self.status = 3
+
+	def change_power(self,dp):
+		self.power += dp
+
+	def to_continue(self):
+		for obj in self.world.game_objects:
+			if obj.name != self.name:
+				if obj.is_hit(self):
+					return False
+
+		if self.is_wall():
+			self.stop()
+			return False
+
+		return True
+				
+	def key_press(self,keyx):
+		self.tempx,self.tempy = self.x,self.y
+
+		if keyx == key.UP or keyx == key.RIGHT or keyx == key.DOWN or keyx == key.LEFT:
+			if keyx == key.UP:
+				self.tempy += self.velocity_y
+			elif keyx == key.RIGHT:
+				self.tempx+=self.velocity_x
+			elif keyx == key.DOWN:
+				self.tempy-=self.velocity_y
+			elif keyx == key.LEFT:
+				self.tempx-=self.velocity_x
+
+			if self.to_continue():
+				self.x,self.y = self.tempx,self.tempy
+		else:
+			if keyx == key.SPACE:
+				self.push_collide()
+
+	def bounce(self):
+		pass
+
+	def move(self):
+		pass
+
+	def pushed(self):
+		self.tempx,self.tempy = self.x,self.y
+		self.tempx += self.velocity_x*cos(self.angle)
+		self.tempy += self.velocity_y*sin(self.angle)
+
+		if self.to_continue():
+			self.x,self.y = self.tempx,self.tempy
+
+	def push_collide(self):
+		for obj in self.world.game_objects:
+			if obj.name != self.name:
+				if obj.is_hit(self,mode = "regular"):
+					obj.to_be_pushed(resources.get_angle_between(self.position,obj.position))
+
+	def update(self):
+		if self.status == 0: #moving
+			self.move()
+		elif self.status == 1: #dead
+			pass
+		elif self.status == 2: #being push
+			self.pushed()
 
 	def get(self):
 		#returns the json format of the player
 		return [self.actual_name,self.name,self.type,[self.x,self.y]]
 
 class AirBender(Player):
-	def __init__(self,actual_name,name,*args,**kwargs):
-		super(AirBender,self).__init__(actual_name = actual_name,name = name,type = 'air',*args,**kwargs)
+	def __init__(self,actual_name,name,world,*args,**kwargs):
+		super(AirBender,self).__init__(actual_name = actual_name,name = name,world = world,type = 'air',*args,**kwargs)
 		#self.x,self.y = Resources.starting_points['char_air']
 
 class EarthBender(Player):
-	def __init__(self,actual_name,name,*args,**kwargs):
-		super(EarthBender,self).__init__(actual_name,name,type = 'earth',*args,**kwargs)
+	def __init__(self,actual_name,name,world,*args,**kwargs):
+		super(EarthBender,self).__init__(actual_name = actual_name,name = name,world = world,type = 'earth',*args,**kwargs)
 		#self.x,self.y = Resources.starting_points['char_earth']
 
 class FireBender(Player):
-	def __init__(self,actual_name,name,*args,**kwargs):
-		super(FireBender,self).__init__(actual_name,name,type = 'fire',*args,**kwargs)
+	def __init__(self,actual_name,name,world,*args,**kwargs):
+		super(FireBender,self).__init__(actual_name = actual_name,name = name,world = world,type = 'fire',*args,**kwargs)
 		#self.x,self.y = Resources.starting_points['char_fire']
 
 class WaterBender(Player):
-	def __init__(self,actual_name,name,*args,**kwargs):
-		super(WaterBender,self).__init__(actual_name,name,type = 'water',*args,**kwargs)
+	def __init__(self,actual_name,name,world,*args,**kwargs):
+		super(WaterBender,self).__init__(actual_name = actual_name,name = name,world = world,type = 'water',*args,**kwargs)
 		#self.x,self.y = Resources.starting_points['char_water']
