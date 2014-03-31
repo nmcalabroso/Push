@@ -31,6 +31,8 @@ class Player(GameObject):
 
 	def represent(self):
 		#returns the regular json format for the position of the player
+		self.push_all.x = self.x
+		self.push_all.y = self.y
 		my = [self.name,self.active_key]
 		if self.active_key == key.SPACE:
 			self.active_key = None
@@ -40,8 +42,6 @@ class Player(GameObject):
 		self.active_key = int(symbol)
 		if self.active_key == key.SPACE:
 			self.push_all.visible = True
-			self.push_all.x = self.x
-			self.push_all.y = self.y
 
 	def on_key_release(self,symbol,modifiers):
 		self.active_key = None
