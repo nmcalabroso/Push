@@ -76,7 +76,7 @@ class GameManager(GameObject):
 		else:
 			#debug mode
 			text_ip = "127.0.0.1"
-			#text_ip = "192.168.0.107"
+			#text_ip = "192.168.254.103"
 			text_port = "8080"
 			text_name = "DebugX"
 
@@ -121,7 +121,7 @@ class GameManager(GameObject):
 
 	def set_media(self,media):
 		self.media = media
-		self.media.volume = 0.75
+		self.media.volume = 0.0
 		self.media.play()
 
 	def set_focus(self,focus):
@@ -280,7 +280,7 @@ class GameManager(GameObject):
 	#Game Logic
 	def update(self,dt):
 		if self.state == Resources.states['GAME']:
-			print "From client:",self.me.represent()
+			#print "From client:",self.me.represent()
 			self.my_connection.send_message(self.me.represent())
 			world_objects = self.my_connection.receive_message() #receive message in format of [['type',[pos_x,pos_y],'actual_name']...list of objects]
 			if world_objects is not None:

@@ -6,8 +6,9 @@ from pyglet import window
 from pyglet import font
 from os.path import join
 from math import sqrt
-from math import atan
+from math import atan2
 from math import fabs
+from math import pi
 
 def get_center_coordinates(window_width,window_height):
 	screen = window.get_platform().get_default_display().get_default_screen()
@@ -24,9 +25,14 @@ def get_distance(pt1 = (0,0), pt2 = (0,1)):
 	return sqrt((pt1[0]-pt2[0])**2 + (pt1[1]-pt2[1])**2)
 
 def get_angle_between(pt1 = (0,0), pt2 = (0,1)):
-	x = fabs(pt1[0]-pt2[0])
-	y = fabs(pt1[1]-pt2[1])
-	return atan(x/y)
+	x = pt2[0]-pt1[0]
+	y = pt2[1]-pt1[1]
+
+	angle = atan2(y,x)
+
+	#if pt1[1] < pt2[1]: angle -= pi
+
+	return angle
 
 class Resources:
 	states = {'TITLE':1,'SETUP':2,'HOST':3,'JOIN':4,'GAME':5,'END':6} #game states

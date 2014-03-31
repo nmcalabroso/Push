@@ -51,15 +51,19 @@ class Player(GameObject):
 		self.velocity_x = velocity_x
 		self.velocity_y = velocity_y
 
+	def moving(self):
+		self.status = 0
+
 	def die(self):
 		self.status = 1
 
-	def stop(self):
-		self.stop = 3
-
 	def to_be_pushed(self,angle):
 		self.angle = angle
+		print "angle of "+self.name+" :",self.angle
 		self.status = 2
+
+	def stop(self):
+		self.status = 3
 
 	def change_power(self,dp):
 		self.power += dp
@@ -71,6 +75,7 @@ class Player(GameObject):
 					return False
 
 		if self.is_wall():
+			self.stop()
 			return False
 
 		return True
@@ -94,8 +99,19 @@ class Player(GameObject):
 			if keyx == key.SPACE:
 				self.push_collide()
 
+	def bounce(self):
+		pass
+
 	def move(self):
 		pass
+
+	def pushed(self):
+		self.tempx,self.tempy = self.x,self.y
+		self.tempx += self.velocity_x*cos(self.angle)
+		self.tempy += self.velocity_y*sin(self.angle)
+
+		if self.to_continue():
+			self.x,self.y = self.tempx,self.tempy
 
 	def push_collide(self):
 		for obj in self.world.game_objects:
@@ -103,14 +119,12 @@ class Player(GameObject):
 				obj.to_be_pushed(resources.get_angle_between(self.position,obj.position))
 
 	def update(self):
-		#colliding_obj = self.is_colliding()
 		if self.status == 0: #moving
-			pass
+			self.move()
 		elif self.status == 1: #dead
 			pass
 		elif self.status == 2: #being push
-			self.x += self.velocity_x*cos(self.angle)
-			self.y += self.velocity_y*sin(self.angle)
+			self.pushed()
 
 	def get(self):
 		#returns the json format of the player
