@@ -78,6 +78,15 @@ class Resources:
 	sprites['host_button']			= center_image(image.load(join(res_path,'debug_button.gif')))
 	sprites['join_button']			= center_image(image.load(join(res_path,'join_button.gif')))
 	sprites['marker']				= center_image(image.load(join(res_path,'marker.png')))
+	sprites['info_bar']				= image.load(join(res_path,'info_bar.png'))
+	sprites['bounces']				= image.load(join(res_path,'bounces2.png'))
+	sprites['powers']				= image.load(join(res_path,'powers.png'))
+
+	#Thumbnails
+	sprites['thumb_air']			= image.load(join(res_path,'thumbnails/thumb_air.png'))
+	sprites['thumb_earth']			= image.load(join(res_path,'thumbnails/thumb_earth.png'))
+	sprites['thumb_fire']			= image.load(join(res_path,'thumbnails/thumb_fire.png'))
+	sprites['thumb_water']			= image.load(join(res_path,'thumbnails/thumb_water.png'))
 	#Backgrounds
 	sprites['title_bg']				= center_image(image.load(join(res_path,'title_bg.jpg')))
 	sprites['setup_bg']				= center_image(image.load(join(res_path,'title_bg.jpg')))

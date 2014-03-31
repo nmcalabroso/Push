@@ -9,6 +9,7 @@ from client.gui import Background
 from client.gui import Button
 from client.gui import TextWidget
 from client.gui import UILabel
+from client.gui import MyRectangle
 from client.manager import GameManager
 from client.player import Player
 from game.resources import Resources
@@ -34,6 +35,9 @@ my_bg = Background(name = 'my_bg',
 				img =  Resources.sprites['title_bg'])
 mp = MediaPlayer()
 
+bounce_sprites = []
+power_sprites = []
+
 @game_window.event
 def on_draw():
 	game_window.clear()
@@ -47,12 +51,18 @@ def on_draw():
 	elif manager.state == Resources.states['JOIN']:
 		join_batch.draw()
 	elif manager.state == Resources.states['GAME']:
-		game_batch.draw() #only UI elements
+		manager.me.draw() #drawing the marker
 		#drawing the actual game elements
-		manager.me.draw()
 		for obj in manager.get_game_objects():
 			obj.draw()
-		
+		game_batch.draw() #only UI elements
+
+		for i in range(manager.me.bounce):
+			bounce_sprites[i].draw()
+
+		for i in range(manager.me.power):
+			power_sprites[i].draw()
+
 	elif manager.state == Resources.states['END']:
 		end_batch.draw()
 
@@ -224,9 +234,79 @@ def join_screen():
 	# End of importation #
 
 def game_screen():
+
+	thumbnail = MyRectangle(name = 'thumbnail',
+						curr_state = Resources.states['GAME'],
+						img = Resources.sprites['thumb_air'],
+						x = 5,
+						y = Resources.window_height-55,
+						batch = game_batch)
+	thumbnail.opacity = 255
+
+	info_bar = MyRectangle(name = 'info_bar',
+						curr_state = Resources.states['GAME'],
+						img = Resources.sprites['info_bar'],
+						x = 20,
+						y = Resources.window_height-80,
+						batch = game_batch)
+
+	player_name = UILabel(name = 'player_name',
+					text = 'My Player',
+					x = info_bar.x + 38,
+					y = info_bar.y+info_bar.height-27,
+					anchor_y = 'bottom',
+                  	font_size = 17.0,
+                  	batch = game_batch)
+
+	label_bounce = UILabel(name = 'label_bounce',
+					text = 'Bounce',
+					x = player_name.x,
+					y = player_name.y-20,
+					anchor_y = 'bottom',
+                  	font_size = 12.0,
+                  	batch = game_batch)
+
+	label_power = UILabel(name = 'label_power',
+					text = 'Power',
+					x = label_bounce.x,
+					y = label_bounce.y-20,
+					anchor_y = 'bottom',
+                  	font_size = 12.0,
+                  	batch = game_batch)
+
+	player_name.color = (255, 255, 255, 255)
+	label_bounce.color = (255, 255, 255, 255)
+	label_power.color = (255, 255, 255, 255)
+
+	# Importation section #
+	manager.add_widget(info_bar)
+	manager.add_label(player_name)
+	manager.add_label(label_bounce)
+	manager.add_label(label_power)
+	manager.add_widget(thumbnail)
+	# End of importation #
+
 	mp.queue(Resources.audio['game_bgm'])
 	my_player = Player(actual_name = "player",name = "player",typex = "air",img = Resources.sprites['marker'])
 	manager.set_client(my_player)
+
+	for i in range(my_player.bounce):
+		bouncex = MyRectangle(name = 'bounce_'+str(i),
+							curr_state = Resources.states['GAME'],
+							img = Resources.sprites['bounces'],
+							x = label_bounce.x+60+(i*(Resources.sprites['bounces'].width+3)),
+							y = label_bounce.y+3)
+		bouncex.opacity = 255
+		bounce_sprites.append(bouncex)
+
+	for i in range(my_player.power):
+		powerx = MyRectangle(name = 'power_'+str(i),
+							curr_state = Resources.states['GAME'],
+							img = Resources.sprites['powers'],
+							x = label_power.x+60+(i*(Resources.sprites['powers'].width+3)),
+							y = label_power.y+3)
+		bouncex.opacity = 255
+		power_sprites.append(powerx)
 
 def end_screen():
 	pass

@@ -47,6 +47,7 @@ class GameManager(GameObject):
 		bg = self.find_widget('my_bg')
 		bg.set_image(Resources.sprites['game_bg'])
 		self.set_player_data()
+		self.set_info_bar()
 
 		self.delete_widgets_by_batch(Resources.batches['host'])
 		self.delete_labels_by_batch(Resources.batches['host'])	
@@ -109,6 +110,12 @@ class GameManager(GameObject):
 		print "IP Address:",ip_address
 		print "Port:",port_num
 		print "Name:",name
+
+	def set_info_bar(self):
+		thumbnail = self.find_widget('thumbnail')
+		thumbnail.image = Resources.sprites['thumb_'+self.me.type]
+		player_name = self.find_label('player_name')
+		player_name.text = self.me.actual_name
 
 	def disconnect(self):
 		self.my_connection.send_message("")
@@ -298,6 +305,8 @@ class GameManager(GameObject):
 													img = Resources.sprites['char_'+obj[2]],
 													x = obj[3][0],
 													y = obj[3][1]))
+						self.bounce = obj[4]
+						self.power = obj[5]
 				else:
 					#deletion of deleted game objects
 					print "deleting..."
@@ -308,8 +317,12 @@ class GameManager(GameObject):
 				for i in range(len(self.game_objects)):
 					obj = self.game_objects[i]
 					obj.x,obj.y = world_objects[i][3]
+					obj.bounce = world_objects[i][4]
+					obj.power = world_objects[i][5]
+
 					if obj.name == self.me.name:
 						self.me.x,self.me.y = obj.x,obj.y
+
 
 
 

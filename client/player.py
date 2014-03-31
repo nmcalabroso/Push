@@ -9,6 +9,9 @@ class Player(GameObject):
 		self.type = typex
 		self.active_key = None
 
+		self.bounce = 5
+		self.power = 5
+
 	def set_data(self,typex,actual_name,name):
 		self.type = typex
 		self.actual_name = actual_name

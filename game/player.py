@@ -135,7 +135,7 @@ class Player(GameObject):
 
 	def get(self):
 		#returns the json format of the player
-		return [self.actual_name,self.name,self.type,[self.x,self.y]]
+		return [self.actual_name,self.name,self.type,[self.x,self.y],self.bounce,self.power]
 
 class AirBender(Player):
 	def __init__(self,actual_name,name,world,*args,**kwargs):
