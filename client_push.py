@@ -55,6 +55,10 @@ def on_draw():
 		#drawing the actual game elements
 		for obj in manager.get_game_objects():
 			obj.draw()
+
+		if manager.me.push_all.visible:
+			manager.me.push_all.draw()
+
 		game_batch.draw() #only UI elements
 
 		for i in range(manager.me.bounce):
