@@ -40,7 +40,7 @@ class Player(GameObject):
 
 	def on_key_press(self,symbol,modifiers):
 		self.active_key = int(symbol)
-		if self.active_key == key.SPACE:
+		if self.active_key == key.SPACE and self.power > 0:
 			self.push_all.visible = True
 
 	def on_key_release(self,symbol,modifiers):

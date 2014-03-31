@@ -297,7 +297,7 @@ class GameManager(GameObject):
 				if diff >= 0:
 					#creating of new objects
 					for i in range(diff):
-						print "creating..."
+						print "Creating game object..."
 						obj = world_objects[i+y]
 						self.add_game_object(Player(actual_name = obj[0],
 													name = obj[1],
@@ -305,11 +305,9 @@ class GameManager(GameObject):
 													img = Resources.sprites['char_'+obj[2]],
 													x = obj[3][0],
 													y = obj[3][1]))
-						self.bounce = obj[4]
-						self.power = obj[5]
 				else:
 					#deletion of deleted game objects
-					print "deleting..."
+					print "Deleting game object..."
 					for i in range(len(world_objects)):
 						while world_objects[i][1] != self.game_objects[i].name:
 							self.delete_game_object(self.game_objects[i].name)
@@ -319,9 +317,9 @@ class GameManager(GameObject):
 					obj.x,obj.y = world_objects[i][3]
 					obj.bounce = world_objects[i][4]
 					obj.power = world_objects[i][5]
-
 					if obj.name == self.me.name:
 						self.me.x,self.me.y = obj.x,obj.y
+						self.me.bounce,self.me.power = obj.bounce,obj.power
 
 
 
