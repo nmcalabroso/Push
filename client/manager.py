@@ -308,8 +308,8 @@ class GameManager(GameObject):
 				for i in range(len(self.game_objects)):
 					obj = self.game_objects[i]
 					obj.x,obj.y = world_objects[i][3]
-
-
+					if obj.name == self.me.name:
+						self.me.x,self.me.y = obj.x,obj.y
 
 
 

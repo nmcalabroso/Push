@@ -48,10 +48,11 @@ def on_draw():
 		join_batch.draw()
 	elif manager.state == Resources.states['GAME']:
 		game_batch.draw() #only UI elements
-		
 		#drawing the actual game elements
+		manager.me.draw()
 		for obj in manager.get_game_objects():
 			obj.draw()
+		
 	elif manager.state == Resources.states['END']:
 		end_batch.draw()
 
@@ -224,8 +225,8 @@ def join_screen():
 
 def game_screen():
 	mp.queue(Resources.audio['game_bgm'])
-	i = Player(actual_name = "player",name = "player",typex = "air",img = Resources.sprites['no_sprite'])
-	manager.set_client(i)
+	my_player = Player(actual_name = "player",name = "player",typex = "air",img = Resources.sprites['marker'])
+	manager.set_client(my_player)
 
 def end_screen():
 	pass

@@ -77,6 +77,7 @@ class Resources:
 	sprites['play_button']			= center_image(image.load(join(res_path,'play_button.gif')))
 	sprites['host_button']			= center_image(image.load(join(res_path,'debug_button.gif')))
 	sprites['join_button']			= center_image(image.load(join(res_path,'join_button.gif')))
+	sprites['marker']				= center_image(image.load(join(res_path,'marker.png')))
 	#Backgrounds
 	sprites['title_bg']				= center_image(image.load(join(res_path,'title_bg.jpg')))
 	sprites['setup_bg']				= center_image(image.load(join(res_path,'title_bg.jpg')))
