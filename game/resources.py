@@ -7,8 +7,6 @@ from pyglet import font
 from os.path import join
 from math import sqrt
 from math import atan2
-from math import fabs
-from math import pi
 
 def get_center_coordinates(window_width,window_height):
 	screen = window.get_platform().get_default_display().get_default_screen()
@@ -22,7 +20,7 @@ def center_image(image):
 	return image
 
 def get_distance(pt1 = (0,0), pt2 = (0,1)):
-	return sqrt((pt1[0]-pt2[0])**2 + (pt1[1]-pt2[1])**2)
+	return int(sqrt((pt1[0]-pt2[0])**2 + (pt1[1]-pt2[1])**2))
 
 def get_angle_between(pt1 = (0,0), pt2 = (0,1)):
 	x = pt2[0]-pt1[0]
