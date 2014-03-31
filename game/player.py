@@ -40,15 +40,17 @@ class Player(GameObject):
 		if self.active:
 			if mode == 'move':
 				pt1 = (obj.tempx,obj.tempy)
-			else:
-				pt1 = (obj.x+obj.velocity_x,obj.y+obj.velocity_y)
-				"""print "self:",pt1
-				print "obj:",obj.position
+				offset = 0
+			elif mode == 'pushed':
+				pt1 = (obj.x,obj.y)
+				offset = 5
+				print "self:",self.position
+				print "obj:",pt1
 				print "actual_distance =", resources.get_distance(self.position,pt1)
-				print "collision_distance =",0.5*(self.width+obj.width)"""
+				print "collision_distance =",0.5*(self.width+obj.width)
 
 			actual_distance = resources.get_distance(self.position,pt1)
-			collision_distance = 0.5*(self.width+obj.width)
+			collision_distance = 0.5*(self.width+obj.width) + offset
 			return actual_distance <= collision_distance
 
 	def set_velocity(self,velocity_x = 1, velocity_y = 1):
@@ -119,8 +121,8 @@ class Player(GameObject):
 	def push_collide(self):
 		for obj in self.world.game_objects:
 			if obj.name != self.name:
-				print obj.name
-				if obj.is_hit(self,mode = "regular"):
+				#print obj.name
+				if obj.is_hit(self,mode = "pushed"):
 					obj.to_be_pushed(resources.get_angle_between(self.position,obj.position))
 
 	def update(self):

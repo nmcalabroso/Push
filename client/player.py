@@ -1,4 +1,5 @@
 from game.gameobject import GameObject
+from pyglet.window import key
 
 class Player(GameObject):
 	def __init__(self,actual_name,name,typex,*args,**kwargs):
@@ -19,7 +20,10 @@ class Player(GameObject):
 
 	def represent(self):
 		#returns the regular json format for the position of the player
-		return [self.name,self.active_key]
+		my = [self.name,self.active_key]
+		if self.active_key == key.SPACE:
+			self.active_key = None
+		return my
 
 	def on_key_press(self,symbol,modifiers):
 		self.active_key = int(symbol)
