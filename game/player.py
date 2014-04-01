@@ -70,8 +70,13 @@ class Player(GameObject):
 	def stop(self):
 		self.status = 3
 
+	def is_dead(self):
+		return self.bounce <= 0
+
 	def lose_bounce(self):
 		self.bounce-=1
+		if self.bounce <= 0:
+			self.die()
 
 	def lose_power(self):
 		self.power-=1
@@ -137,8 +142,6 @@ class Player(GameObject):
 	def update(self):
 		if self.status == 0: #moving
 			self.move()
-		elif self.status == 1: #dead
-			pass
 		elif self.status == 2: #being push
 			self.pushed()
 

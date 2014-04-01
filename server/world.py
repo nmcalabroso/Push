@@ -105,4 +105,7 @@ class GameWorld(GameObject):
 		obj = self.find_game_object(data[0]) #get obj that has name data[0]
 		if obj is not None:
 			obj.key_press(data[1]) #move obj according to the sent key
-			obj.update()
+			if not obj.is_dead():
+				obj.update()
+			else:
+				self.delete_game_object(obj.name)
