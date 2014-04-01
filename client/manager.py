@@ -68,6 +68,8 @@ class GameManager(GameObject):
 		self.delete_widgets_by_batch(Resources.batches['game'])
 		self.delete_labels_by_batch(Resources.batches['game'])
 
+		self.my_connection.my_socket.close()
+
 		if mode != "dead":#lose
 			logo = self.find_widget('game_over')
 			logo.image = Resources.sprites['game_win']
