@@ -76,13 +76,13 @@ class GameWorld(GameObject):
 				if num2 is 5:
 					obj = BounceUp(name = "bounce_up_"+str(self.powerup_count),
 									world = self,
-									x = randint(5,Resources.window_width-5),
-									y = randint(5,Resources.window_height-5))
+									x = randint(5,Resources.window_width-25),
+									y = randint(5,Resources.window_height-25))
 				elif num2 is 3 or num2 is 4:
 					obj = PowerUp(name = "power_up_"+str(self.powerup_count),
 									world = self,
-									x = randint(5,Resources.window_width-5),
-									y = randint(5,Resources.window_height-5))
+									x = randint(5,Resources.window_width-25),
+									y = randint(5,Resources.window_height-25))
 				if obj:
 					print "Creating Upgrade!"
 					self.powerup_count+=1

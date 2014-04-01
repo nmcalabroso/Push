@@ -109,6 +109,8 @@ def title_screen():
 
 def setup_screen():
 	# Instantiation section #
+	mp.queue(Resources.audio['transition_to_game'])
+
 	join_button = Button(name = 'join_button',
 						curr_state = 'SETUP',
 						target_state = 'JOIN',
@@ -351,7 +353,7 @@ def end_screen():
 	manager.add_widget(game_over)
 	# End of importation #
 
-	mp.queue(Resources.audio['end_bgm'])
+	#mp.queue(Resources.audio['end_bgm'])
 #<-- End of States -->
 
 def main():

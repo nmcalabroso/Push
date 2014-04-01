@@ -5,6 +5,7 @@ from client.view_objects import Player
 from client.view_objects import Upgrade
 from random import randint
 from random import choice
+from time import sleep
 
 class GameManager(GameObject):
 
@@ -56,10 +57,11 @@ class GameManager(GameObject):
 		self.delete_widgets_by_batch(Resources.batches['join'])
 		self.delete_labels_by_batch(Resources.batches['join'])
 
-		self.state = Resources.states['GAME']
+		self.media.next()
+		sleep(4.4)
 		self.media.next()
 		self.media.eos_action = self.media.EOS_LOOP
-
+		self.state = Resources.states['GAME']
 		self.window.push_handlers(self.me)
 
 	def switch_to_end(self,mode = "dead"):
@@ -76,7 +78,6 @@ class GameManager(GameObject):
 			logo.image = Resources.sprites['game_win']
 			logo.x = 190
 
-		self.media.next()
 		self.state = Resources.states['END']
 
 	def set_player_data(self):
@@ -144,6 +145,7 @@ class GameManager(GameObject):
 	def set_media(self,media):
 		self.media = media
 		self.media.volume = 0.75
+		self.media.eos_action = self.media.EOS_LOOP
 		self.media.play()
 
 	def set_focus(self,focus):
@@ -361,8 +363,14 @@ class GameManager(GameObject):
 							obj.power = world_objects[i][5]
 							if obj.name == self.me.name:
 								self.me.x,self.me.y = obj.x,obj.y
+								
+								if self.me.bounce < obj.bounce or self.me.power < obj.power:
+									self.me.hit_upgrade()
+								
 								self.me.bounce,self.me.power = obj.bounce,obj.power
+								
 								if self.me.bounce <= 0:
+									self.me.die()
 									self.switch_to_end()
 								elif state == "END":
 									self.switch_to_end(mode = "winner")

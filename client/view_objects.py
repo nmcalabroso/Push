@@ -14,11 +14,19 @@ class Player(GameObject):
 		self.bounce = 5
 		self.power = 5
 		self.push_sfx = Resources.audio['push_all']
+		self.upgrade_sfx = Resources.audio['hit_upgrade']
+		self.end_sfx = Resources.audio['transition_to_end']
 		self.push_all = Sprite(x = self.x,
 							y = self.y,
 							img = Resources.sprites['push_all'])
 		self.push_all.visible = False
 
+
+	def hit_upgrade(self):
+		self.upgrade_sfx.play()
+
+	def die(self):
+		self.end_sfx.play()
 
 	def set_data(self,typex,actual_name,name):
 		self.type = typex
