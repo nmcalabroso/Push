@@ -8,8 +8,6 @@ buffer_size = 4096
 class Connection:
 	def __init__(self):
 		self.my_socket = socket.socket()
-		#self.my_socket.setblocking(0)
-		self.test = ''
 
 	def join_server(self,configs):
 		self.my_socket.connect(configs)

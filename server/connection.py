@@ -22,22 +22,31 @@ class Server:
 			print 'Binding address...'
 			self.my_socket.bind(('',port))
 			#self.my_socket.setblocking(0)
-		except Exception as e:
+		except socket.error as e:
 			print "Server error!",e
 			sys.exit(1)
 
 	def send_message(self,message,target_client):
 		to_json = json.dumps(message)
- 		target_client.send(to_json)
+ 		
+ 		try:
+ 			target_client.send(to_json)
+ 		except socket.error:
+ 			print "Server error: Sending..."
+ 			self.close(target_client)
+
  		time.sleep(delay*0.5)
 
 	def receive_message(self,client):
-		msg = client.recv(buffer_size)
-		
+		try:
+			msg = client.recv(buffer_size)
+		except socket.error:
+ 			print "Server error: Receiving..."
+ 			self.close(client)
+
 		if len(msg) is 0:
 			self.close(client)
 			return None
-		#print "recv:",msg
 		return json.loads(msg)
 
 	def accept(self):
@@ -53,6 +62,7 @@ class Server:
 
 	def close(self,client):
 		addr = client.getpeername()
+		client.close()
 		print "%s has  disconnected" % addr[0]
 		clientsname = addr[0]+"!"+str(addr[1])
 		self.clients.remove(client)
@@ -69,7 +79,8 @@ class Server:
 					self.accept()
 				else:
 					self.data = self.receive_message(s) #receive json from client in inputr
-					self.world.update(self.data)
-					my_msg = self.world.get() #get all game objects
-					#print "From world:",my_msg
-					self.send_message(my_msg,s)
+					if self.data:
+						self.world.update(self.data)
+						my_msg = self.world.get() #get all game objects
+						#print "From world:",my_msg
+						self.send_message(my_msg,s)

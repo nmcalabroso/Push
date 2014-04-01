@@ -71,10 +71,6 @@ def on_draw():
 	elif manager.state == Resources.states['END']:
 		end_batch.draw()
 
-def on_window_close():
-	manager.disconnect()
-	exit()
-
 def update(dt):
 	manager.update(dt)
 
