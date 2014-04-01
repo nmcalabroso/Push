@@ -236,6 +236,13 @@ def join_screen():
 
 def game_screen():
 
+	info_bar = MyRectangle(name = 'info_bar',
+						curr_state = 'GAME',
+						img = Resources.sprites['info_bar'],
+						x = 20,
+						y = Resources.window_height-80,
+						batch = game_batch)
+
 	thumbnail = MyRectangle(name = 'thumbnail',
 						curr_state = 'GAME',
 						img = Resources.sprites['thumb_green'],
@@ -243,13 +250,6 @@ def game_screen():
 						y = Resources.window_height-55,
 						batch = game_batch)
 	thumbnail.opacity = 255
-
-	info_bar = MyRectangle(name = 'info_bar',
-						curr_state = 'GAME',
-						img = Resources.sprites['info_bar'],
-						x = 20,
-						y = Resources.window_height-80,
-						batch = game_batch)
 
 	player_name = UILabel(name = 'player_name',
 					text = 'My Player',
