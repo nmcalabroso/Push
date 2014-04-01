@@ -13,7 +13,7 @@ class Player(GameObject):
 
 		self.bounce = 5
 		self.power = 5
-
+		self.push_sfx = Resources.audio['push_all']
 		self.push_all = Sprite(x = self.x,
 							y = self.y,
 							img = Resources.sprites['push_all'])
@@ -41,6 +41,7 @@ class Player(GameObject):
 	def on_key_press(self,symbol,modifiers):
 		self.active_key = int(symbol)
 		if self.active_key == key.SPACE and self.power > 0:
+			self.push_sfx.play()
 			self.push_all.visible = True
 
 	def on_key_release(self,symbol,modifiers):

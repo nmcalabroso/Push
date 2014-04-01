@@ -66,7 +66,7 @@ class Resources:
 	audio['game_bgm']				= media.load(join(sfx_path,"game_bgm.mp3"))
 	audio['end_bgm']				= media.load(join(sfx_path,"end_bgm.mp3"))
 	audio['button']					= media.load(join(sfx_path,"button.wav"),streaming=False)
-	audio['push']					= media.load(join(sfx_path,"push.wav"),streaming=False)
+	audio['push_all']				= media.load(join(sfx_path,"push.wav"),streaming=False)
 
 
 	sprites = {}
