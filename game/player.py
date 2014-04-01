@@ -16,42 +16,39 @@ class Player(GameObject):
 		self.accelaration_y = 0
 		self.angle = 0
 		self.type = type
-
 		self.bounce = 5 #life
 		self.power = 5 #pushing power
 		self.status = 3 #0 - moving; 1 - dead; 2 - being pushed; 3 - stop
 
 	def is_wall(self,mode = 'move'):
-		if self.active:
-			if mode == 'move':
-				pt = (self.tempx,self.tempy)
-			else:
-				pt = self.position
+		if mode == 'move':
+			pt = (self.tempx,self.tempy)
+		else:
+			pt = self.position
 
-			if pt[0]-(self.width*0.5) <= 0 or pt[0]+(self.width*0.5) >= resources.Resources.window_width:
-				return True
+		if pt[0]-(self.width*0.5) <= 0 or pt[0]+(self.width*0.5) >= resources.Resources.window_width:
+			return True
 
-			if pt[1]-(self.height*0.5) <= 0 or pt[1]+(self.height*0.5) >= resources.Resources.window_height:
-				return True
-				
-			return False
+		if pt[1]-(self.height*0.5) <= 0 or pt[1]+(self.height*0.5) >= resources.Resources.window_height:
+			return True
+			
+		return False
 
 	def is_hit(self, obj, mode = 'move'):
-		if self.active:
-			if mode == 'move':
-				pt1 = (obj.tempx,obj.tempy)
-				offset = 0
-			elif mode == 'pushed':
-				pt1 = (obj.x,obj.y)
-				offset = 5
-				#print "self:",self.position
-				#print "obj:",pt1
-				#print "actual_distance =", resources.get_distance(self.position,pt1)
-				#print "collision_distance =",0.5*(self.width+obj.width)
+		if mode == 'move':
+			pt1 = (obj.tempx,obj.tempy)
+			offset = 0
+		elif mode == 'pushed':
+			pt1 = (obj.x,obj.y)
+			offset = 5
+			#print "self:",self.position
+			#print "obj:",pt1
+			#print "actual_distance =", resources.get_distance(self.position,pt1)
+			#print "collision_distance =",0.5*(self.width+obj.width)
 
-			actual_distance = resources.get_distance(self.position,pt1)
-			collision_distance = 0.5*(self.width+obj.width) + offset
-			return actual_distance <= collision_distance
+		actual_distance = resources.get_distance(self.position,pt1)
+		collision_distance = 0.5*(self.width+obj.width) + offset
+		return actual_distance <= collision_distance
 
 	def set_velocity(self,velocity_x = 1, velocity_y = 1):
 		self.velocity_x = velocity_x
@@ -148,23 +145,3 @@ class Player(GameObject):
 	def get(self):
 		#returns the json format of the player
 		return [self.actual_name,self.name,self.type,[self.x,self.y],self.bounce,self.power]
-
-class AirBender(Player):
-	def __init__(self,actual_name,name,world,*args,**kwargs):
-		super(AirBender,self).__init__(actual_name = actual_name,name = name,world = world,type = 'air',*args,**kwargs)
-		#self.x,self.y = Resources.starting_points['char_air']
-
-class EarthBender(Player):
-	def __init__(self,actual_name,name,world,*args,**kwargs):
-		super(EarthBender,self).__init__(actual_name = actual_name,name = name,world = world,type = 'earth',*args,**kwargs)
-		#self.x,self.y = Resources.starting_points['char_earth']
-
-class FireBender(Player):
-	def __init__(self,actual_name,name,world,*args,**kwargs):
-		super(FireBender,self).__init__(actual_name = actual_name,name = name,world = world,type = 'fire',*args,**kwargs)
-		#self.x,self.y = Resources.starting_points['char_fire']
-
-class WaterBender(Player):
-	def __init__(self,actual_name,name,world,*args,**kwargs):
-		super(WaterBender,self).__init__(actual_name = actual_name,name = name,world = world,type = 'water',*args,**kwargs)
-		#self.x,self.y = Resources.starting_points['char_water']

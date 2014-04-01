@@ -238,7 +238,7 @@ def game_screen():
 
 	thumbnail = MyRectangle(name = 'thumbnail',
 						curr_state = 'GAME',
-						img = Resources.sprites['thumb_air'],
+						img = Resources.sprites['thumb_green'],
 						x = 5,
 						y = Resources.window_height-55,
 						batch = game_batch)
@@ -288,7 +288,7 @@ def game_screen():
 	# End of importation #
 
 	mp.queue(Resources.audio['game_bgm'])
-	my_player = Player(actual_name = "player",name = "player",typex = "air",img = Resources.sprites['marker'])
+	my_player = Player(actual_name = "player",name = "player",typex = "green",img = Resources.sprites['marker'])
 	manager.set_client(my_player)
 
 	for i in range(my_player.bounce):

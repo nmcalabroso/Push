@@ -4,7 +4,6 @@ import sys
 import select
 from server.world import GameWorld
 import simplejson as json
-import sys
 
 delay = 0.003
 buffer_size = 4096
@@ -22,20 +21,17 @@ class Server:
 		try:
 			print 'Binding address...'
 			self.my_socket.bind(('',port))
-			#self.my_socket.setblocking(0)
 		except socket.error as e:
 			print "Server error!",e
 			sys.exit(1)
 
 	def send_message(self,message,target_client):
 		to_json = json.dumps(message)
- 		
  		try:
  			target_client.send(to_json)
  		except socket.error:
  			print "Server error: Sending..."
  			self.close(target_client)
-
  		time.sleep(delay*0.5)
 
 	def receive_message(self,client):
@@ -44,7 +40,6 @@ class Server:
 		except socket.error:
  			print "Server error: Receiving..."
  			self.close(client)
-
 		if len(msg) is 0:
 			self.close(client)
 			return None
@@ -76,8 +71,9 @@ class Server:
 	def start(self,backlog=5): #main loop
 		self.my_socket.listen(backlog)
 		self.clients.append(self.my_socket)
+		cont = True
 		try:
-			while True:
+			while cont:
 				time.sleep(delay)
 				inputr, outputr, exceptr = select.select(self.clients,[],[])
 				for s in inputr:
@@ -88,13 +84,16 @@ class Server:
 						if self.data:
 							self.world.update(self.data)
 							my_world = self.world.get() #get all game object
-
 							if not self.world.is_over():
 								state = "GAME"
 							else:
 								state = "END"
+								cont = False
 
 							my_msg = [my_world,state]
 							self.send_message(my_msg,s)
+
+			print "Round ended. Please restart."
+			self.shutdown()
 		except KeyboardInterrupt:
 			self.shutdown()

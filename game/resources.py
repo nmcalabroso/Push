@@ -32,7 +32,7 @@ def get_angle_between(pt1 = (0,0), pt2 = (0,1)):
 
 class Resources:
 	states = {'TITLE':1,'SETUP':2,'HOST':3,'JOIN':4,'GAME':5,'END':6} #game states
-	types = ['air','water','fire','earth'] #player types
+	types = ['green','lblue','red','mblue'] #player types
 	window_width = 800
 	window_height = 600
 	center_x,center_y = get_center_coordinates(window_width,window_height)
@@ -66,6 +66,7 @@ class Resources:
 	audio['game_bgm']				= media.load(join(sfx_path,"game_bgm.mp3"))
 	audio['end_bgm']				= media.load(join(sfx_path,"end_bgm.mp3"))
 	audio['button']					= media.load(join(sfx_path,"button.wav"),streaming=False)
+	audio['push']					= media.load(join(sfx_path,"push.wav"),streaming=False)
 
 
 	sprites = {}
@@ -86,18 +87,17 @@ class Resources:
 	sprites['powers']				= image.load(join(res_path,'powers.png'))
 	sprites['game_over']			= image.load(join(res_path,'game_over.png'))
 	sprites['game_win']				= image.load(join(res_path,'game_win2.png'))
-
 	#Thumbnails
-	sprites['thumb_air']			= image.load(join(res_path,'thumbnails/thumb_air.png'))
-	sprites['thumb_earth']			= image.load(join(res_path,'thumbnails/thumb_earth.png'))
-	sprites['thumb_fire']			= image.load(join(res_path,'thumbnails/thumb_fire.png'))
-	sprites['thumb_water']			= image.load(join(res_path,'thumbnails/thumb_water.png'))
+	sprites['thumb_green']			= image.load(join(res_path,'thumbnails/thumb_air.png'))
+	sprites['thumb_mblue']			= image.load(join(res_path,'thumbnails/thumb_earth.png'))
+	sprites['thumb_red']			= image.load(join(res_path,'thumbnails/thumb_fire.png'))
+	sprites['thumb_lblue']			= image.load(join(res_path,'thumbnails/thumb_water.png'))
 	#Backgrounds
 	sprites['title_bg']				= center_image(image.load(join(res_path,'title_bg.jpg')))
 	sprites['setup_bg']				= center_image(image.load(join(res_path,'setup_bg.jpg')))
 	sprites['game_bg']				= center_image(image.load(join(res_path,'game_bg.jpg')))
 	#Game Elements
-	sprites['char_air']				= center_image(image.load(join(res_path,'char_air.png')))
-	sprites['char_earth']			= center_image(image.load(join(res_path,'char_earth.png')))
-	sprites['char_fire']			= center_image(image.load(join(res_path,'char_fire.png')))
-	sprites['char_water']			= center_image(image.load(join(res_path,'char_water.png')))
+	sprites['char_green']			= center_image(image.load(join(res_path,'char_air.png')))
+	sprites['char_mblue']			= center_image(image.load(join(res_path,'char_earth.png')))
+	sprites['char_red']				= center_image(image.load(join(res_path,'char_fire.png')))
+	sprites['char_lblue']			= center_image(image.load(join(res_path,'char_water.png')))

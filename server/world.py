@@ -1,10 +1,6 @@
 from game.gameobject import GameObject
 from game.resources import Resources
 from game.player import Player
-from game.player import AirBender
-from game.player import FireBender
-from game.player import EarthBender
-from game.player import WaterBender
 
 class GameWorld(GameObject):
 
@@ -20,36 +16,14 @@ class GameWorld(GameObject):
 		name_id = player[1]
 		cl = player[2]
 		x,y = player[3]
-
-		if cl.lower() == 'air':
-			p = AirBender(actual_name = actual_name,
-						name = name_id,
-						world = self,
-						img = Resources.sprites['char_air'],
-						x = x,
-						y = y)
-		elif cl.lower() == 'fire':
-			p = FireBender(actual_name = actual_name,
-						name = name_id,
-						world = self,
-						img = Resources.sprites['char_fire'],
-						x = x,
-						y = y)
-
-		elif cl.lower() == 'earth':
-			p = EarthBender(actual_name = actual_name,
-						name = name_id,
-						world = self,
-						img = Resources.sprites['char_earth'],
-						x = x,
-						y = y)
-		elif cl.lower() == 'water':
-			p = WaterBender(actual_name = actual_name,
-						name = name_id,
-						world = self,
-						img = Resources.sprites['char_earth'],
-						x = x,
-						y = y)
+		
+		p = Player(actual_name = actual_name,
+					name = name_id,
+					world = self,
+					type = cl,
+					img = Resources.sprites['char_'+cl],
+					x = x,
+					y = y)
 
 		self.add_game_object(p)
 
