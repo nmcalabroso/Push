@@ -78,6 +78,8 @@ def update(dt):
 #<-- States -->
 def title_screen():
 	mp.queue(Resources.audio['title_bgm'])
+	my_logo = OrderedGroup(0)
+	my_button = OrderedGroup(1)
 	
 	# Instantiation section #
 	logo = MyRectangle(name = "logo",
@@ -85,7 +87,8 @@ def title_screen():
 						img = Resources.sprites['logo'],
 						x = Resources.window_width*0.5,
 						y = Resources.window_height*0.5,
-						batch = title_batch)
+						batch = title_batch,
+						group = my_logo)
 	logo.opacity = 255
 
 	play_button = Button(name = 'start_button',
@@ -95,7 +98,8 @@ def title_screen():
 						img = Resources.sprites['play_button'],
 						x = Resources.window_width*0.5+50,
 						y = Resources.window_height*0.5-110,
-						batch = title_batch)
+						batch = title_batch,
+						group = my_button)
 	# End of Instantiation #
 
 	# Handler specification #
