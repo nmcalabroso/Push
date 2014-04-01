@@ -30,6 +30,5 @@ class Connection:
 			
 		if len(to_string) > 0:
 			lst = json.loads(to_string)
-			#lst.append('name') #temporary
 			return lst
 		return None

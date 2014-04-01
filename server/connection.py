@@ -87,8 +87,14 @@ class Server:
 						self.data = self.receive_message(s) #receive json from client in inputr
 						if self.data:
 							self.world.update(self.data)
-							my_msg = self.world.get() #get all game objects
-							#print "From world:",my_msg
+							my_world = self.world.get() #get all game object
+
+							if not self.world.is_over():
+								state = "GAME"
+							else:
+								state = "END"
+
+							my_msg = [my_world,state]
 							self.send_message(my_msg,s)
 		except KeyboardInterrupt:
 			self.shutdown()

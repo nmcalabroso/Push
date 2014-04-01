@@ -10,16 +10,8 @@ class GameWorld(GameObject):
 
 	def __init__(self,*args,**kwargs):
 		super(GameWorld,self).__init__(name = 'World',img = Resources.sprites['no_sprite'], *args,**kwargs)
-		self.game_state = Resources.states['GAME']
 		self.game_objects = [] #gameobject pool
-		self.widgets = [] #gui pool
-		self.labels = [] #label pool
-
-	def switch_to_end(self):
-		pass
-
-	def set_players(self):
-		pass
+		self.start = False
 
 	def add_player(self,player):
 		print "player:",player
@@ -61,6 +53,9 @@ class GameWorld(GameObject):
 
 		self.add_game_object(p)
 
+		if len(self.game_objects) > 1:
+			self.start = True
+
 	def add_game_object(self,obj):
 		obj.active = True
 		self.game_objects.append(obj)
@@ -100,6 +95,9 @@ class GameWorld(GameObject):
 			if isinstance(obj,Player):
 				wrld.append(obj.get())
 		return wrld
+
+	def is_over(self):
+		return len(self.game_objects) == 1 and self.start
 
 	def update(self,data):
 		obj = self.find_game_object(data[0]) #get obj that has name data[0]

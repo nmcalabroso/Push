@@ -300,8 +300,10 @@ class GameManager(GameObject):
 	def update(self,dt):
 		if self.state == Resources.states['GAME']:
 			self.my_connection.send_message(self.me.represent())
-			world_objects = self.my_connection.receive_message() #receive message in format of [['type',[pos_x,pos_y],'actual_name']...list of objects]
-			
+			msg = self.my_connection.receive_message() #receive message in format of [['type',[pos_x,pos_y],'actual_name']...list of objects]
+			world_objects = msg[0]
+			state = msg[1]
+
 			if world_objects is not None:
 				x = len(world_objects)
 				y = len(self.game_objects)
@@ -339,8 +341,5 @@ class GameManager(GameObject):
 						self.me.bounce,self.me.power = obj.bounce,obj.power
 						if self.me.bounce <= 0:
 							self.switch_to_end()
-
-
-
-
-
+						elif state == "END":
+							self.switch_to_end(mode = "winner")
