@@ -64,6 +64,7 @@ class Resources:
 	#Sound Effects
 	audio['title_bgm'] 				= media.load(join(sfx_path,"title_bgm.mp3"))
 	audio['game_bgm']				= media.load(join(sfx_path,"game_bgm.mp3"))
+	audio['end_bgm']				= media.load(join(sfx_path,"end_bgm.mp3"))
 	audio['button']					= media.load(join(sfx_path,"button.wav"),streaming=False)
 
 
@@ -77,11 +78,14 @@ class Resources:
 	sprites['play_button']			= center_image(image.load(join(res_path,'play_button.gif')))
 	sprites['host_button']			= center_image(image.load(join(res_path,'debug_button.gif')))
 	sprites['join_button']			= center_image(image.load(join(res_path,'join_button.gif')))
+	sprites['quit_button']			= center_image(image.load(join(res_path,'quit_button.gif')))
 	sprites['marker']				= center_image(image.load(join(res_path,'marker.png')))
 	sprites['push_all']				= center_image(image.load(join(res_path,'push_all.png')))
 	sprites['info_bar']				= image.load(join(res_path,'info_bar.png'))
 	sprites['bounces']				= image.load(join(res_path,'bounces2.png'))
 	sprites['powers']				= image.load(join(res_path,'powers.png'))
+	sprites['game_over']			= image.load(join(res_path,'game_over.png'))
+	sprites['game_win']				= image.load(join(res_path,'game_win2.png'))
 
 	#Thumbnails
 	sprites['thumb_air']			= image.load(join(res_path,'thumbnails/thumb_air.png'))
@@ -90,7 +94,7 @@ class Resources:
 	sprites['thumb_water']			= image.load(join(res_path,'thumbnails/thumb_water.png'))
 	#Backgrounds
 	sprites['title_bg']				= center_image(image.load(join(res_path,'title_bg.jpg')))
-	sprites['setup_bg']				= center_image(image.load(join(res_path,'title_bg.jpg')))
+	sprites['setup_bg']				= center_image(image.load(join(res_path,'setup_bg.jpg')))
 	sprites['game_bg']				= center_image(image.load(join(res_path,'game_bg.jpg')))
 	#Game Elements
 	sprites['char_air']				= center_image(image.load(join(res_path,'char_air.png')))

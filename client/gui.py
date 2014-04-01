@@ -1,4 +1,5 @@
 import pyglet
+from pyglet.app import exit
 from pyglet.text import Label
 from pyglet.window import mouse
 from game.gameobject import GameObject
@@ -46,6 +47,34 @@ class Button(UIObject):
         if self.active and self.world.state == Resources.states[self.curr_state]:
             if self.hit_test(x,y):
                 #print "Entering Button:",self.name
+                self.color = (150,150,150)
+                self.world.window.set_mouse_cursor(self.hand_cursor)
+            else:
+                self.color = (255,255,255)
+
+class QuitButton(UIObject):
+    def __init__(self,name,curr_state,world,*args,**kwargs):
+        super(QuitButton, self).__init__(name = name, curr_state = curr_state, world = world,*args,**kwargs)
+        self.name = name
+        self.hand_cursor = world.window.get_system_mouse_cursor('hand')
+        self.fx = Resources.audio['button']
+
+    def hit_test(self,x,y):
+        if x > (self.x - (self.width*0.5)) and x < (self.x + (self.width*0.5)):
+            if y > (self.y - self.height*0.5) and y < (self.y + (self.height*0.5)):
+                return True
+        return False
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        if self.active and self.world.state == Resources.states[self.curr_state]:
+            if button == mouse.LEFT or button == 0:
+                if self.hit_test(x,y):
+                    self.fx.play()
+                    exit()
+                    
+    def on_mouse_motion(self, x, y, dx, dy):
+        if self.active and self.world.state == Resources.states[self.curr_state]:
+            if self.hit_test(x,y):
                 self.color = (150,150,150)
                 self.world.window.set_mouse_cursor(self.hand_cursor)
             else:

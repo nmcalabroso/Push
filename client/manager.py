@@ -61,8 +61,20 @@ class GameManager(GameObject):
 
 		self.window.push_handlers(self.me)
 
-	def switch_to_end(self):
-		pass
+	def switch_to_end(self,mode = "dead"):
+		bg = self.find_widget('my_bg')
+		bg.set_image(Resources.sprites['title_bg'])
+
+		self.delete_widgets_by_batch(Resources.batches['game'])
+		self.delete_labels_by_batch(Resources.batches['game'])
+
+		if mode != "dead":#lose
+			logo = self.find_widget('game_over')
+			logo.image = Resources.sprites['game_win']
+			logo.x = 190
+
+		self.media.next()
+		self.state = Resources.states['END']
 
 	def set_player_data(self):
 		if self.state == Resources.states['JOIN']:
@@ -128,7 +140,7 @@ class GameManager(GameObject):
 
 	def set_media(self,media):
 		self.media = media
-		self.media.volume = 0.0
+		self.media.volume = 0.75
 		self.media.play()
 
 	def set_focus(self,focus):
@@ -320,6 +332,8 @@ class GameManager(GameObject):
 					if obj.name == self.me.name:
 						self.me.x,self.me.y = obj.x,obj.y
 						self.me.bounce,self.me.power = obj.bounce,obj.power
+						if self.me.bounce <= 0:
+							self.switch_to_end()
 
 
 

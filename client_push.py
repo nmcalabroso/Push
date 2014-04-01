@@ -7,6 +7,7 @@ from pyglet.clock import schedule_interval
 from pyglet.window import Window
 from client.gui import Background
 from client.gui import Button
+from client.gui import QuitButton
 from client.gui import TextWidget
 from client.gui import UILabel
 from client.gui import MyRectangle
@@ -240,7 +241,7 @@ def join_screen():
 def game_screen():
 
 	thumbnail = MyRectangle(name = 'thumbnail',
-						curr_state = Resources.states['GAME'],
+						curr_state = 'GAME',
 						img = Resources.sprites['thumb_air'],
 						x = 5,
 						y = Resources.window_height-55,
@@ -248,7 +249,7 @@ def game_screen():
 	thumbnail.opacity = 255
 
 	info_bar = MyRectangle(name = 'info_bar',
-						curr_state = Resources.states['GAME'],
+						curr_state = 'GAME',
 						img = Resources.sprites['info_bar'],
 						x = 20,
 						y = Resources.window_height-80,
@@ -296,7 +297,7 @@ def game_screen():
 
 	for i in range(my_player.bounce):
 		bouncex = MyRectangle(name = 'bounce_'+str(i),
-							curr_state = Resources.states['GAME'],
+							curr_state = 'GAME',
 							img = Resources.sprites['bounces'],
 							x = label_bounce.x+60+(i*(Resources.sprites['bounces'].width+3)),
 							y = label_bounce.y+3)
@@ -305,7 +306,7 @@ def game_screen():
 
 	for i in range(my_player.power):
 		powerx = MyRectangle(name = 'power_'+str(i),
-							curr_state = Resources.states['GAME'],
+							curr_state = 'GAME',
 							img = Resources.sprites['powers'],
 							x = label_power.x+60+(i*(Resources.sprites['powers'].width+3)),
 							y = label_power.y+3)
@@ -313,7 +314,32 @@ def game_screen():
 		power_sprites.append(powerx)
 
 def end_screen():
-	pass
+	game_over = MyRectangle(name = "game_over",
+							curr_state = 'END',
+							img = Resources.sprites['game_over'],
+							x = 150,
+							y = 225,
+							batch = end_batch)
+	game_over.opacity = 255
+
+	quit_button = QuitButton(name = "quit_button",
+							curr_state = 'END',
+							img = Resources.sprites['quit_button'],
+							world = manager,
+							x = 400,
+							y = 150,
+							batch = end_batch)
+
+	# Handler specification #
+	game_window.push_handlers(quit_button)
+	# End of specification #
+
+	# Importation section #
+	manager.add_widget(quit_button)
+	manager.add_widget(game_over)
+	# End of importation #
+
+	mp.queue(Resources.audio['end_bgm'])
 #<-- End of States -->
 
 def main():
