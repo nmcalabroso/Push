@@ -1,25 +1,32 @@
 from gameobject import GameObject
 from pyglet.window import key
-from math import cos,sin
+from math import cos,sin,pi
 import resources
 
 class Player(GameObject):
+
 	def __init__(self,actual_name,name,world,type,*args,**kwargs):
 		super(Player,self).__init__(name = name,*args,**kwargs)
 		self.world = world
 		self.actual_name = actual_name
+		
 		self.tempx = self.x
 		self.tempy = self.y
+		
 		self.velocity_x = 0
 		self.velocity_y = 0
-		self.accelaration_x = 0
-		self.accelaration_y = 0
-		self.angle = 0
+		self.velocity_angle = 0
+
+		self.acceleration_x = 3
+		self.acceleration_y = 3
+		self.acceleration_angle = 0
+		
 		self.type = type
 
 		self.bounce = 5 #life
 		self.power = 5 #pushing power
-		self.status = 0 #0 - normal; 1 - dead; 2 - being pushed; 3 - stop
+		self.status = 3 #0 - moving; 1 - dead; 2 - stop
+		self.is_pushed = False
 
 	def is_wall(self,mode = 'move'):
 		if self.active:
@@ -64,8 +71,24 @@ class Player(GameObject):
 		self.status = 1
 
 	def to_be_pushed(self,angle):
-		self.angle = angle
+		self.velocity_angle = angle
+		self.is_pushed = True
+
+	def stop(self):
+		self.velocity_x = 0
+		self.velocity_y = 0
 		self.status = 2
+
+	def is_dead(self):
+		return self.bounce <= 0
+
+	def lose_bounce(self):
+		self.bounce-=1
+		if self.bounce <= 0:
+			self.die()
+
+	def lose_power(self):
+		self.power-=1
 
 	def change_power(self,dp):
 		self.power += dp
@@ -85,67 +108,58 @@ class Player(GameObject):
 		self.tempx,self.tempy = self.x,self.y
 		
 		if keyx == key.UP or keyx == key.RIGHT or keyx == key.DOWN or keyx == key.LEFT:
-			if keyx == key.UP:
-				self.velocity_x = 0
-				self.velocity_y = 5
-				self.angle = 90
-			elif keyx == key.RIGHT:
-				self.velocity_x = 5
-				self.velocity_y = 0
-				self.angle = 0
-			elif keyx == key.DOWN:
-				self.velocity_x = 0
-				self.velocity_y = -5
-				self.angle = 90
-			elif keyx == key.LEFT:
-				self.velocity_x = -5
-				self.velocity_y = 0
-				self.angle = 0
-
 			self.moving()
+			
+			if keyx == key.UP:
+				print "UP!"
+				self.acceleration_angle = pi/2
+			elif keyx == key.RIGHT:
+				print "RIGHT!"
+				self.acceleration_angle = 0
+			elif keyx == key.DOWN:
+				print "DOWN!"
+				self.acceleration_angle = (3*pi)/2
+			elif keyx == key.LEFT:
+				print "LEFT!"
+				self.acceleration_angle = pi
+						
+			self.velocity_x += self.acceleration_x*cos(self.acceleration_angle)
+			self.velocity_y += self.acceleration_y*sin(self.acceleration_angle)
+
+			print "(acceleration,angle)",((self.acceleration_x,self.acceleration_y),self.acceleration_angle)
+			print "(velocity,angle)",((self.velocity_x,self.velocity_y),self.velocity_angle)
+
 		else:
 			if keyx == key.SPACE:
 				self.push_collide()
 
 	def move(self):
-		self.x += self.velocity_x*cos(self.angle)
-		self.y += self.velocity_y*sin(self.angle)
+		self.tempx,self.tempy = self.x,self.y
+		self.tempx += self.velocity_x*cos(self.velocity_angle)
+		self.tempy += self.velocity_y*sin(self.velocity_angle)
+
+		if self.to_continue():
+			self.x,self.y = self.tempx,self.tempy
+
 		self.stop()
+
+	def pushed(self):
+		self.tempx,self.tempy = self.x,self.y
+		self.tempx += self.velocity_x*cos(self.angle)
+		self.tempy += self.velocity_y*sin(self.angle)
+
+		if self.to_continue(mode = "pushed"):
+			self.x,self.y = self.tempx,self.tempy
 
 	def push_collide(self):
 		for obj in self.world.game_objects:
 			if obj.name != self.name:
 				obj.to_be_pushed(resources.get_angle_between(self.position,obj.position))
-
+				if obj.is_hit(self,mode = "pushed"):
+					obj.to_be_pushed(resources.get_angle_between(self.position,obj.position))
 	def update(self):
 		#colliding_obj = self.is_colliding()
 		if self.status == 0:
 			self.move()
-		elif self.status == 1:
-			pass
-		elif self.status == 2:
-			self.move()
-
-	def get(self):
-		#returns the json format of the player
-		return [self.actual_name,self.name,self.type,[self.x,self.y]]
-
-class AirBender(Player):
-	def __init__(self,actual_name,name,world,*args,**kwargs):
-		super(AirBender,self).__init__(actual_name = actual_name,name = name,world = world,type = 'air',*args,**kwargs)
-		#self.x,self.y = Resources.starting_points['char_air']
-
-class EarthBender(Player):
-	def __init__(self,actual_name,name,world,*args,**kwargs):
-		super(EarthBender,self).__init__(actual_name = actual_name,name = name,world = world,type = 'earth',*args,**kwargs)
-		#self.x,self.y = Resources.starting_points['char_earth']
-
-class FireBender(Player):
-	def __init__(self,actual_name,name,world,*args,**kwargs):
-		super(FireBender,self).__init__(actual_name = actual_name,name = name,world = world,type = 'fire',*args,**kwargs)
-		#self.x,self.y = Resources.starting_points['char_fire']
-
-class WaterBender(Player):
-	def __init__(self,actual_name,name,world,*args,**kwargs):
-		super(WaterBender,self).__init__(actual_name = actual_name,name = name,world = world,type = 'water',*args,**kwargs)
-		#self.x,self.y = Resources.starting_points['char_water']
+		if self.is_pushed: #being push
+			self.pushed()
