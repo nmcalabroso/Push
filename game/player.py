@@ -41,10 +41,6 @@ class Player(GameObject):
 		elif mode == 'pushed':
 			pt1 = (obj.x,obj.y)
 			offset = 5
-			#print "self:",self.position
-			#print "obj:",pt1
-			#print "actual_distance =", resources.get_distance(self.position,pt1)
-			#print "collision_distance =",0.5*(self.width+obj.width)
 
 		actual_distance = resources.get_distance(self.position,pt1)
 		collision_distance = 0.5*(self.width+obj.width) + offset
@@ -77,15 +73,28 @@ class Player(GameObject):
 
 	def lose_power(self):
 		self.power-=1
+		if self.power <= 0:
+			self.power = 0
 
-	def change_power(self,dp):
+	def power_up(self,dp):
 		self.power += dp
+		if self.power >= 5:
+			self.power = 5
+
+	def bounce_up(self,db):
+		self.bounce += db
+		if self.bounce >= 5:
+			self.bounce = 5
 
 	def to_continue(self,mode = "normal"):
 		for obj in self.world.game_objects:
 			if obj.name != self.name:
 				if obj.is_hit(self):
-					return False
+					if isinstance(obj,Player):
+						self.stop()
+						return False
+					else:
+						obj.apply(self)
 
 		if self.is_wall():
 			if mode == "pushed":
@@ -123,8 +132,8 @@ class Player(GameObject):
 
 	def pushed(self):
 		self.tempx,self.tempy = self.x,self.y
-		self.tempx += self.velocity_x*cos(self.angle)
-		self.tempy += self.velocity_y*sin(self.angle)
+		self.tempx += (self.velocity_x+3)*cos(self.angle)
+		self.tempy += (self.velocity_y+3)*sin(self.angle)
 
 		if self.to_continue(mode = "pushed"):
 			self.x,self.y = self.tempx,self.tempy
@@ -132,9 +141,11 @@ class Player(GameObject):
 	def push_collide(self):
 		for obj in self.world.game_objects:
 			if obj.name != self.name:
-				#print obj.name
 				if obj.is_hit(self,mode = "pushed"):
-					obj.to_be_pushed(resources.get_angle_between(self.position,obj.position))
+					if isinstance(obj,Player):
+						obj.to_be_pushed(resources.get_angle_between(self.position,obj.position))
+					else:
+						pass
 
 	def update(self):
 		if self.status == 0: #moving

@@ -50,3 +50,9 @@ class Player(GameObject):
 
 	def update(self,dt):
 		pass
+
+class Upgrade(GameObject):
+	def __init__(self,name,typex,*args,**kwargs):
+		super(Upgrade,self).__init__(name = name,*args,**kwargs)
+		self.name = name
+		self.type = typex

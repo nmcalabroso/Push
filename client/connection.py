@@ -24,9 +24,8 @@ class Connection:
 
 		try:
 			to_string = self.my_socket.recv(buffer_size)
-		except socket.error as e:
+		except socket.error:
 			print "Client: Receiving error."
-			print "Error:",e
 			
 		if len(to_string) > 0:
 			lst = json.loads(to_string)

@@ -2,8 +2,8 @@ import socket
 import time
 import sys
 import select
-from server.world import GameWorld
 import simplejson as json
+from server.world import GameWorld
 
 delay = 0.003
 buffer_size = 4096

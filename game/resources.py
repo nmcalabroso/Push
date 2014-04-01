@@ -68,7 +68,6 @@ class Resources:
 	audio['button']					= media.load(join(sfx_path,"button.wav"),streaming=False)
 	audio['push_all']				= media.load(join(sfx_path,"push.wav"),streaming=False)
 
-
 	sprites = {}
 	res_path = './assets/img'
 
@@ -76,10 +75,12 @@ class Resources:
 	sprites['no_sprite'] 			= image.load(join(res_path,'blank.png'))
 	sprites['start_button']			= center_image(image.load(join(res_path,'start_button.gif')))
 	#sprites['start_button_mv']		= image.load_animation(join(res_path,'start_button.gif'))
-	sprites['play_button']			= center_image(image.load(join(res_path,'play_button.gif')))
+	sprites['play_button']			= center_image(image.load(join(res_path,'play_button_shadow.gif')))
 	sprites['host_button']			= center_image(image.load(join(res_path,'debug_button.gif')))
 	sprites['join_button']			= center_image(image.load(join(res_path,'join_button.gif')))
 	sprites['quit_button']			= center_image(image.load(join(res_path,'quit_button.gif')))
+	sprites['logo']					= center_image(image.load(join(res_path,'logo.png')))
+	sprites['push_all']				= center_image(image.load(join(res_path,'push_all.png')))
 	sprites['marker']				= center_image(image.load(join(res_path,'marker.png')))
 	sprites['push_all']				= center_image(image.load(join(res_path,'push_all.png')))
 	sprites['info_bar']				= image.load(join(res_path,'info_bar.png'))
@@ -101,3 +102,5 @@ class Resources:
 	sprites['char_mblue']			= center_image(image.load(join(res_path,'char_earth.png')))
 	sprites['char_red']				= center_image(image.load(join(res_path,'char_fire.png')))
 	sprites['char_lblue']			= center_image(image.load(join(res_path,'char_water.png')))
+	sprites['power_up']				= center_image(image.load(join(res_path,'power_up.png')))
+	sprites['bounce_up']			= center_image(image.load(join(res_path,'bounce_up.png')))

@@ -12,7 +12,7 @@ from client.gui import TextWidget
 from client.gui import UILabel
 from client.gui import MyRectangle
 from client.manager import GameManager
-from client.player import Player
+from client.view_objects import Player
 from game.resources import Resources
 
 game_window = Window(Resources.window_width, Resources.window_height)
@@ -80,13 +80,21 @@ def title_screen():
 	mp.queue(Resources.audio['title_bgm'])
 	
 	# Instantiation section #
+	logo = MyRectangle(name = "logo",
+						curr_state = 'TITLE',
+						img = Resources.sprites['logo'],
+						x = Resources.window_width*0.5,
+						y = Resources.window_height*0.5,
+						batch = title_batch)
+	logo.opacity = 255
+
 	play_button = Button(name = 'start_button',
 						curr_state = 'TITLE',
 						target_state = 'SETUP',
 						world = manager,
 						img = Resources.sprites['play_button'],
-						x = Resources.window_width*0.5,
-						y = Resources.window_height*0.5,
+						x = Resources.window_width*0.5+50,
+						y = Resources.window_height*0.5-110,
 						batch = title_batch)
 	# End of Instantiation #
 
@@ -96,6 +104,7 @@ def title_screen():
 
 	# Importation section #
 	manager.add_widget(play_button)
+	manager.add_widget(logo)
 	# End of importation #
 
 def setup_screen():

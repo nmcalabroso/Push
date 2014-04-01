@@ -1,6 +1,9 @@
 from game.gameobject import GameObject
 from game.resources import Resources
 from game.player import Player
+from game.upgrades import PowerUp
+from game.upgrades import BounceUp
+from random import randint
 
 class GameWorld(GameObject):
 
@@ -8,6 +11,7 @@ class GameWorld(GameObject):
 		super(GameWorld,self).__init__(name = 'World',img = Resources.sprites['no_sprite'], *args,**kwargs)
 		self.game_objects = [] #gameobject pool
 		self.start = False
+		self.powerup_count = 0
 
 	def add_player(self,player):
 		print "player:",player
@@ -63,11 +67,31 @@ class GameWorld(GameObject):
 				del self.game_objects[i]
 				break
 
+	def generate_upgrade(self):
+		if self.powerup_count < 5:
+			num = randint(1,100)
+			if num is 5:
+				obj = None
+				num2 = randint(1,10)
+				if num2 is 5:
+					obj = BounceUp(name = "bounce_up_"+str(self.powerup_count),
+									world = self,
+									x = randint(5,Resources.window_width-5),
+									y = randint(5,Resources.window_height-5))
+				elif num2 is 3 or num2 is 4:
+					obj = PowerUp(name = "power_up_"+str(self.powerup_count),
+									world = self,
+									x = randint(5,Resources.window_width-5),
+									y = randint(5,Resources.window_height-5))
+				if obj:
+					print "Creating Upgrade!"
+					self.powerup_count+=1
+					self.add_game_object(obj)		
+
 	def get(self): #world representation
 		wrld = []
 		for obj in self.get_game_objects():
-			if isinstance(obj,Player):
-				wrld.append(obj.get())
+			wrld.append(obj.get())
 		return wrld
 
 	def is_over(self):
@@ -75,6 +99,7 @@ class GameWorld(GameObject):
 
 	def update(self,data):
 		obj = self.find_game_object(data[0]) #get obj that has name data[0]
+		self.generate_upgrade()
 		if obj is not None:
 			obj.key_press(data[1]) #move obj according to the sent key
 			if not obj.is_dead():

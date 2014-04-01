@@ -1,7 +1,8 @@
 from game.gameobject import GameObject
 from game.resources import Resources
 from connection import Connection
-from client.player import Player
+from client.view_objects import Player
+from client.view_objects import Upgrade
 from random import randint
 from random import choice
 
@@ -303,45 +304,69 @@ class GameManager(GameObject):
 		if self.state == Resources.states['GAME']:
 			self.my_connection.send_message(self.me.represent())
 			msg = self.my_connection.receive_message() #receive message in format of [['type',[pos_x,pos_y],'actual_name']...list of objects]
-			world_objects = msg[0]
-			state = msg[1]
+			#print "msg:",msg
+			temp = self.game_objects
+			try:
+				if msg is not None:
+					world_objects = msg[0]
+					state = msg[1]
+					x = len(world_objects)
+					y = len(self.game_objects)
+					diff = x - y
+					if diff >= 0:
+						#creating of new objects
+						for i in range(diff):
+							#print "Creating game object..."
+							obj = world_objects[i+y]
+							if obj[1] == "power_up" or obj[1] == "bounce_up":
+								print "Creating upgrade..."
+								self.add_game_object(Upgrade(name = obj[0],
+															typex = obj[1],
+															img = Resources.sprites[obj[1]],
+															x = obj[2][0],
+															y = obj[2][1]))
+							else:
+								print "Creating player..."
+								self.add_game_object(Player(actual_name = obj[0],
+														name = obj[1],
+														typex = obj[2],
+														img = Resources.sprites['char_'+obj[2]],
+														x = obj[3][0],
+														y = obj[3][1]))
+					else:
+						#deletion of deleted game objects
+						print "Deleting game object..."
 
-			if world_objects is not None:
-				x = len(world_objects)
-				y = len(self.game_objects)
-				diff = x - y
-				if diff >= 0:
-					#creating of new objects
-					for i in range(diff):
-						print "Creating game object..."
-						obj = world_objects[i+y]
-						self.add_game_object(Player(actual_name = obj[0],
-													name = obj[1],
-													typex = obj[2],
-													img = Resources.sprites['char_'+obj[2]],
-													x = obj[3][0],
-													y = obj[3][1]))
-				else:
-					#deletion of deleted game objects
-					print "Deleting game object..."
+						for i in range(len(world_objects)):
+							obj = world_objects[i]
+							if obj[1] == "power_up" or obj[1] == "bounce_up":
+								curr_name = obj[0]
+							else:
+								curr_name = obj[1]
 
-					for i in range(len(world_objects)):
-						while world_objects[i][1] != self.game_objects[i].name:
-							self.delete_game_object(self.game_objects[i].name)
+							while curr_name != self.game_objects[i].name:
+								self.delete_game_object(self.game_objects[i].name)
 
-						if i is len(world_objects)-1:
-							for j in range(i+1,len(self.game_objects)):
-								self.delete_game_object(self.game_objects[j].name)
+							if i is len(world_objects)-1:
+								for j in range(i+1,len(self.game_objects)):
+									self.delete_game_object(self.game_objects[j].name)
 
-				for i in range(len(self.game_objects)):
-					obj = self.game_objects[i]
-					obj.x,obj.y = world_objects[i][3]
-					obj.bounce = world_objects[i][4]
-					obj.power = world_objects[i][5]
-					if obj.name == self.me.name:
-						self.me.x,self.me.y = obj.x,obj.y
-						self.me.bounce,self.me.power = obj.bounce,obj.power
-						if self.me.bounce <= 0:
-							self.switch_to_end()
-						elif state == "END":
-							self.switch_to_end(mode = "winner")
+					for i in range(len(self.game_objects)):
+						obj = self.game_objects[i]
+						if isinstance(obj,Upgrade):
+							obj.x,obj.y = world_objects[i][2]
+						else:
+							obj.x,obj.y = world_objects[i][3]
+							obj.bounce = world_objects[i][4]
+							obj.power = world_objects[i][5]
+							if obj.name == self.me.name:
+								self.me.x,self.me.y = obj.x,obj.y
+								self.me.bounce,self.me.power = obj.bounce,obj.power
+								if self.me.bounce <= 0:
+									self.switch_to_end()
+								elif state == "END":
+									self.switch_to_end(mode = "winner")
+			except Exception as e:
+				print "msg:",msg
+				print "curr_world:",temp
+				print "Error:",e	
