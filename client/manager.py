@@ -126,6 +126,8 @@ class GameManager(GameObject):
 		print "Name:",name
 
 	def set_info_bar(self):
+		info_bar = self.find_widget('info_bar')
+		info_bar.opacity = 185
 		thumbnail = self.find_widget('thumbnail')
 		thumbnail.image = Resources.sprites['thumb_'+self.me.type]
 		player_name = self.find_label('player_name')

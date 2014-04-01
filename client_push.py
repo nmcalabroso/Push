@@ -1,5 +1,5 @@
 from pyglet.app import run
-from pyglet.app import exit
+from pyglet.graphics import OrderedGroup
 from pyglet.media import Player as MediaPlayer
 from pyglet.clock import ClockDisplay
 from pyglet.clock import set_fps_limit
@@ -235,20 +235,24 @@ def join_screen():
 	# End of importation #
 
 def game_screen():
+	my_rectangle = OrderedGroup(0)
+	elements = OrderedGroup(1)
 
 	info_bar = MyRectangle(name = 'info_bar',
 						curr_state = 'GAME',
 						img = Resources.sprites['info_bar'],
 						x = 20,
 						y = Resources.window_height-80,
-						batch = game_batch)
+						batch = game_batch,
+						group = my_rectangle)
 
 	thumbnail = MyRectangle(name = 'thumbnail',
 						curr_state = 'GAME',
 						img = Resources.sprites['thumb_green'],
 						x = 5,
 						y = Resources.window_height-55,
-						batch = game_batch)
+						batch = game_batch,
+						group = elements)
 	thumbnail.opacity = 255
 
 	player_name = UILabel(name = 'player_name',
@@ -257,7 +261,8 @@ def game_screen():
 					y = info_bar.y+info_bar.height-27,
 					anchor_y = 'bottom',
                   	font_size = 17.0,
-                  	batch = game_batch)
+                  	batch = game_batch,
+                  	group = elements)
 
 	label_bounce = UILabel(name = 'label_bounce',
 					text = 'Bounce',
@@ -265,7 +270,8 @@ def game_screen():
 					y = player_name.y-20,
 					anchor_y = 'bottom',
                   	font_size = 12.0,
-                  	batch = game_batch)
+                  	batch = game_batch,
+                  	group = elements)
 
 	label_power = UILabel(name = 'label_power',
 					text = 'Power',
@@ -273,7 +279,8 @@ def game_screen():
 					y = label_bounce.y-20,
 					anchor_y = 'bottom',
                   	font_size = 12.0,
-                  	batch = game_batch)
+                  	batch = game_batch,
+                  	group = elements)
 
 	player_name.color = (255, 255, 255, 255)
 	label_bounce.color = (255, 255, 255, 255)
