@@ -4,6 +4,7 @@ import sys
 import select
 from server.world import GameWorld
 import simplejson as json
+import sys
 
 delay = 0.003
 buffer_size = 4096
@@ -68,19 +69,26 @@ class Server:
 		self.clients.remove(client)
 		self.world.delete_game_object(clientsname)
 
+	def shutdown(self):
+		print "\nPUSH admin: Server is shutting down..."
+		sys.exit(1)
+
 	def start(self,backlog=5): #main loop
 		self.my_socket.listen(backlog)
 		self.clients.append(self.my_socket)
-		while True:
-			time.sleep(delay)
-			inputr, outputr, exceptr = select.select(self.clients,[],[])
-			for s in inputr:
-				if s is self.my_socket:
-					self.accept()
-				else:
-					self.data = self.receive_message(s) #receive json from client in inputr
-					if self.data:
-						self.world.update(self.data)
-						my_msg = self.world.get() #get all game objects
-						#print "From world:",my_msg
-						self.send_message(my_msg,s)
+		try:
+			while True:
+				time.sleep(delay)
+				inputr, outputr, exceptr = select.select(self.clients,[],[])
+				for s in inputr:
+					if s is self.my_socket:
+						self.accept()
+					else:
+						self.data = self.receive_message(s) #receive json from client in inputr
+						if self.data:
+							self.world.update(self.data)
+							my_msg = self.world.get() #get all game objects
+							#print "From world:",my_msg
+							self.send_message(my_msg,s)
+		except KeyboardInterrupt:
+			self.shutdown()

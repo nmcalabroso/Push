@@ -297,7 +297,6 @@ class GameManager(GameObject):
 	#Game Logic
 	def update(self,dt):
 		if self.state == Resources.states['GAME']:
-			#print "From client:",self.me.represent()
 			self.my_connection.send_message(self.me.represent())
 			world_objects = self.my_connection.receive_message() #receive message in format of [['type',[pos_x,pos_y],'actual_name']...list of objects]
 			
@@ -319,10 +318,6 @@ class GameManager(GameObject):
 				else:
 					#deletion of deleted game objects
 					print "Deleting game object..."
-					print "From World:",world_objects
-					print "Current World:"
-					for obj in self.game_objects:
-						print "obj:",obj.name
 
 					for i in range(len(world_objects)):
 						while world_objects[i][1] != self.game_objects[i].name:
@@ -331,12 +326,6 @@ class GameManager(GameObject):
 						if i is len(world_objects)-1:
 							for j in range(i+1,len(self.game_objects)):
 								self.delete_game_object(self.game_objects[j].name)
-
-					print "After Current World"
-					for obj in self.game_objects:
-						print "obj:",obj.name
-
-					
 
 				for i in range(len(self.game_objects)):
 					obj = self.game_objects[i]
