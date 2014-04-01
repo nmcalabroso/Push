@@ -32,6 +32,7 @@ class GameWorld(GameObject):
 		self.add_game_object(p)
 
 		if len(self.game_objects) > 1:
+			print "Game starts!"
 			self.start = True
 
 	def add_game_object(self,obj):
@@ -94,8 +95,15 @@ class GameWorld(GameObject):
 			wrld.append(obj.get())
 		return wrld
 
+	def get_players(self):
+		pl = []
+		for obj in self.game_objects:
+			if obj.type != "power_up" and obj.type != "bounce_up":
+				pl.append(obj)
+		return pl
+
 	def is_over(self):
-		return len(self.game_objects) == 1 and self.start
+		return len(self.get_players()) == 1 and self.start
 
 	def update(self,data):
 		obj = self.find_game_object(data[0]) #get obj that has name data[0]

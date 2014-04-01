@@ -67,7 +67,7 @@ class GameManager(GameObject):
 	def switch_to_end(self,mode = "dead"):
 		bg = self.find_widget('my_bg')
 		bg.set_image(Resources.sprites['title_bg'])
-
+		self.media.next()
 		self.delete_widgets_by_batch(Resources.batches['game'])
 		self.delete_labels_by_batch(Resources.batches['game'])
 
@@ -373,6 +373,7 @@ class GameManager(GameObject):
 									self.me.die()
 									self.switch_to_end()
 								elif state == "END":
+									self.me.win()
 									self.switch_to_end(mode = "winner")
 			except Exception as e:
 				print "msg:",msg

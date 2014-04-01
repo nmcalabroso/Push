@@ -64,10 +64,10 @@ class Resources:
 	#Sound Effects
 	audio['title_bgm'] 				= media.load(join(sfx_path,"title_bgm.wav"))
 	audio['game_bgm']				= media.load(join(sfx_path,"game_bgm.wav"))
-	audio['end_bgm']				= media.load(join(sfx_path,"end_bgm.mp3"))
 	audio['button']					= media.load(join(sfx_path,"button.wav"),streaming=False)
 	audio['push_all']				= media.load(join(sfx_path,"push.wav"),streaming=False)
 	audio['hit_upgrade']			= media.load(join(sfx_path,"hit_upgrade.mp3"),streaming=False)
+	audio['game_win']				= media.load(join(sfx_path,"game_win.mp3"),streaming=False)
 	audio['transition_to_game']		= media.load(join(sfx_path,"transition_to_game.mp3"))
 	audio['transition_to_end']		= media.load(join(sfx_path,"transition_to_end.mp3"))
 

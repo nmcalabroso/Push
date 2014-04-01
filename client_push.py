@@ -357,7 +357,7 @@ def end_screen():
 	manager.add_widget(game_over)
 	# End of importation #
 
-	#mp.queue(Resources.audio['end_bgm'])
+	mp.queue(Resources.audio['title_bgm'])
 #<-- End of States -->
 
 def main():

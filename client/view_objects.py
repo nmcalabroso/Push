@@ -16,6 +16,8 @@ class Player(GameObject):
 		self.push_sfx = Resources.audio['push_all']
 		self.upgrade_sfx = Resources.audio['hit_upgrade']
 		self.end_sfx = Resources.audio['transition_to_end']
+		self.game_win = Resources.audio['game_win']
+
 		self.push_all = Sprite(x = self.x,
 							y = self.y,
 							img = Resources.sprites['push_all'])
@@ -27,6 +29,9 @@ class Player(GameObject):
 
 	def die(self):
 		self.end_sfx.play()
+
+	def win(self):
+		self.game_win.play()
 
 	def set_data(self,typex,actual_name,name):
 		self.type = typex
