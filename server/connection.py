@@ -40,9 +40,12 @@ class Server:
 		except socket.error:
  			print "Server error: Receiving..."
  			self.close(client)
-		if len(msg) is 0:
+ 			return None
+
+		if  msg is not None and len(msg) is 0:
 			self.close(client)
 			return None
+
 		return json.loads(msg)
 
 	def accept(self):
