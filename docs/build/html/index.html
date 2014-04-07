@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Welcome to Push’s documentation! &mdash; Push 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Push 1.0 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="#">Push 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="welcome-to-push-s-documentation">
+<h1>Welcome to Push&#8217;s documentation!<a class="headerlink" href="#welcome-to-push-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="connection">
+<h2>Connection<a class="headerlink" href="#connection" title="Permalink to this headline">¶</a></h2>
+<p>TCP is the protocol used to utilize its reliability despite its drawbacks in speed compared to UDP. Usually, in this type of games, UDP supposedly is the protocol used but the developers chose not to do so with the knowledge that the game is to be used in a local area setting, therefore rendering the differences in time delay, if not irrelevant, negligible for this setting. Since in-game collisions are of great importance, it is best that the exchange of messages is kept reliable and concurrent.</p>
+</div>
+<div class="section" id="the-application">
+<h2>The Application<a class="headerlink" href="#the-application" title="Permalink to this headline">¶</a></h2>
+<p>Note: the <tt class="docutils literal"><span class="pre">simplejson</span></tt> library was used to serialize messages exchanged between end systems</p>
+<div class="section" id="server">
+<h3>Server<a class="headerlink" href="#server" title="Permalink to this headline">¶</a></h3>
+<p>The server runs and acts as the receiver of messages using the <em>select method</em> and not threads. This is to reduce the load for the server during unnecessary waiting time. In the usage of threads, it is necessary for the system to maintain an infinite loop for each connection, and aside from these threads being memory and process heavy, so is idle time, making it not suitable for a time-sensitive singleton-type collision monitoring system. In the <em>select method</em>, processing is more efficient because messages by clients are processed by the server immediately only after receiving them, therefore ensuring that processing is done only when necessary.</p>
+</div>
+<div class="section" id="client">
+<h3>Client<a class="headerlink" href="#client" title="Permalink to this headline">¶</a></h3>
+<p>As per the application&#8217;s architecture, the clients act simply as viewboxes or monitors (i.e. <em>slaves</em>) that redraws infinitely while expecting messages from the server. This is not the same case as what happens at the server side because no threads are run and the server application runs only one loop in itself, and so this design is still tolerable.</p>
+</div>
+<div class="section" id="connection-initiation">
+<h3>Connection Initiation<a class="headerlink" href="#connection-initiation" title="Permalink to this headline">¶</a></h3>
+<div class="line-block">
+<div class="line">The server application <tt class="docutils literal"><span class="pre">server_push.py</span></tt> runs in the background.</div>
+</div>
+<div class="line-block">
+<div class="line">The client applications <tt class="docutils literal"><span class="pre">client_push.py</span></tt> connect to the machine running the server application and, consequently, the server application itself.</div>
+</div>
+<div class="line-block">
+<div class="line">Once the connection has been established between the server and a client via handshaking protocol (a subprotocol feature of TCP), the client sends an initial merrage to the server containing information about the user and its in-game character with the format:</div>
+</div>
+<div class="line-block">
+<div class="line"><tt class="docutils literal"><span class="pre">[char_name,</span> <span class="pre">char_color,</span> <span class="pre">[x_pos,y_pos]]</span></tt></div>
+</div>
+<div class="line-block">
+<div class="line">where:</div>
+<div class="line"><tt class="docutils literal"><span class="pre">char_name</span></tt> is a string input from the user</div>
+<div class="line"><tt class="docutils literal"><span class="pre">char_color</span></tt> is a random color value generated by the client application</div>
+<div class="line"><tt class="docutils literal"><span class="pre">x_pos</span></tt> and <tt class="docutils literal"><span class="pre">y_pos</span></tt> are random float values generated by the client application</div>
+</div>
+<div class="line-block">
+<div class="line">After the server receives this message, this list will be appended with a unique identifier in the format:</div>
+</div>
+<div class="line-block">
+<div class="line"><tt class="docutils literal"><span class="pre">ip_address_of_the_client!port_number</span></tt></div>
+<div class="line">e.g. <strong>192.168.1.103!8080</strong></div>
+</div>
+<div class="line-block">
+<div class="line">The server creates a game object with this information. It will then pass the succeeding logical processes to the game layer (world).</div>
+</div>
+<div class="line-block">
+<div class="line">Moreover, with this design, anyone can connect to the game anytime as long as the server application is running and/or a game is ongoing, similar to the protocol of preexisting network multiplayer games like Counter Strike. Likewise, the game follows the mechanics of <em>last man standing</em>.</div>
+</div>
+</div>
+</div>
+<div class="section" id="game-flow">
+<h2>Game Flow<a class="headerlink" href="#game-flow" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">Because the <em>select method</em> is followed by the server, it only processes clients that are able to send messages to it.</div>
+</div>
+<div class="line-block">
+<div class="line">During the gaming phase, the client sends a message to the server in the format:</div>
+</div>
+<div class="line-block">
+<div class="line"><tt class="docutils literal"><span class="pre">[unique_id,</span> <span class="pre">key_pressed]</span></tt></div>
+</div>
+<div class="line-block">
+<div class="line">where:</div>
+<div class="line"><tt class="docutils literal"><span class="pre">unique_id</span></tt> is a string assigned by the server at the initiation phase</div>
+<div class="line"><tt class="docutils literal"><span class="pre">key_pressed</span></tt> is an integer corresponding to the keyboard key pressed</div>
+</div>
+<div class="line-block">
+<div class="line">At the moment the server receives this message, it will process it immediately, pass it through game logic, and broadcast the new state of the game field in the format:</div>
+</div>
+<div class="line-block">
+<div class="line"><tt class="docutils literal"><span class="pre">[[object1,object2,...,objectN],game_state]</span></tt></div>
+</div>
+<div class="line-block">
+<div class="line">where:</div>
+<div class="line"><tt class="docutils literal"><span class="pre">object1</span></tt> is also a list in the format <tt class="docutils literal"><span class="pre">[unique_id,</span> <span class="pre">[x_pos,y_pos]]</span></tt></div>
+<div class="line"><tt class="docutils literal"><span class="pre">game_state</span></tt> is a string that may carry a value of &#8220;game&#8221; or &#8220;end&#8221;</div>
+</div>
+<div class="line-block">
+<div class="line">Game objects are included in what the server sends to the client since they are only viewboxes. We view this design of the software as advantageous, especially when there are only a number of users, since this singleton-type game logic processing allows for uniformity of information among clients and therefore consistent game and <em>world state</em>. Other designs can cause inconsistencies among clients because of distribution of logic and intermittent connection for one client can be destructive to the whole game and its clients, i.e. information can appear out of sync.</div>
+</div>
+</div>
+<div class="section" id="mechanics">
+<h2>Mechanics<a class="headerlink" href="#mechanics" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Every character has 5 life points and 5 power units.</li>
+<li>Life is reduced if a character is pushed by another to the walls.</li>
+<li>The motion caused by a push will be cancelled out if a character collides with another player.</li>
+<li>Every push costs the player one power unit.</li>
+<li>A player is defeated and disappears from the field when its life points reduce to zero.</li>
+<li>The player that remains alone in the field wins the game (<em>last man standing</em>).</li>
+<li>Power-ups, life points and power units randomly appear in the field.</li>
+</ol>
+</div>
+<div class="section" id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this headline">¶</a></h2>
+<p>Fork us on GitHub:
+<a class="reference external" href="http://www.github.com/nmcalabroso/Push">http://www.github.com/nmcalabroso/Push</a></p>
+<p>Notes:
+| The source codes in Python for both client and server applications are in the link above.
+| The executable version of the client application is located in the <em>build</em> folder. Still, the <tt class="docutils literal"><span class="pre">server_push.py</span></tt> file must be used to enable network gaming and experience the game fully.</p>
+<div class="line-block">
+<div class="line">Bunao, Earle Randolph R.</div>
+<div class="line">Calabroso, Neil Francis M.</div>
+<div class="line">Mendoza, Kristoffer Marion L.</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to Push&#8217;s documentation!</a><ul>
+<li><a class="reference internal" href="#connection">Connection</a></li>
+<li><a class="reference internal" href="#the-application">The Application</a><ul>
+<li><a class="reference internal" href="#server">Server</a></li>
+<li><a class="reference internal" href="#client">Client</a></li>
+<li><a class="reference internal" href="#connection-initiation">Connection Initiation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#game-flow">Game Flow</a></li>
+<li><a class="reference internal" href="#mechanics">Mechanics</a></li>
+<li><a class="reference internal" href="#source">Source</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="#">Push 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, E. Bunao, N. Calabroso, K. Mendoza.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
